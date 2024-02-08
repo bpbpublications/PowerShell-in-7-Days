@@ -1,0 +1,19 @@
+# Create a PowerShell Remote Session to the Target Computer using the New-PSSession cmdlet
+$credential = Get-Credential
+New-PSSession -ComputerName Computer -Credential $credential
+
+# Create a PowerShell Remote Session to the Target Computer using the Enter-PSSession cmdlet
+$credential = Get-Credential
+Enter-PSSession -ComputerName Computer -Credential $credential
+
+# Create a PowerShell Remote Session to the Target Computer and Store in a Variable
+$credential = Get-Credential
+$session = New-PSSession -ComputerName Computer -Authentication Negotiate -Credential $credential
+
+# Retrieve All PowerShell Remote Sessions
+Get-PSSession
+
+
+
+
+

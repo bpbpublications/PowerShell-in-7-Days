@@ -1,0 +1,32 @@
+ # Get all processes and sort by CPU usage
+ Get-Process | Sort-Object -Property CPU -Descending
+
+ # Get the top 5 processes by CPU usage
+ Get-Process | Sort-Object -Property CPU -Descending | Select-Object -First 5
+
+ # Retrieve the Error events from the System log and export to a CSV file
+ Get-EventLog -LogName System | Where-Object { $_.EntryType -eq "Error" } | Export-Csv -Path C:\Temp\Errors.csv
+
+ 
+# Import the Active Directory module
+Import-Module ActiveDirectory
+
+# Get all users and sort by surname, then filter out disabled accounts,
+# then create a custom object with the required properties, then display in a grid view
+Get-ADUser -Filter * -Property GivenName, Surname, Enabled, MemberOf |
+Sort-Object -Property Surname |
+Where-Object {$_.Enabled -eq $True} |
+ForEach-Object {
+    $groups = $_.MemberOf | ForEach-Object { (Get-ADGroup $_).Name }
+    $properties = @{
+        'First Name' = $_.GivenName
+        'Last Name' = $_.Surname
+        'Username' = $_.SamAccountName
+        'Enabled' = $_.Enabled
+        'Groups' = $groups -join ', '
+    }
+    New-Object PSObject -Property $properties
+} | Select-Object 'First Name', 'Last Name', 'Username', 'Enabled', 'Groups' | Out-GridView
+
+
+

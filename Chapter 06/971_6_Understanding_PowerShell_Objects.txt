@@ -1,0 +1,9 @@
+# Get-ChildItem
+$file = Get-Item C:\Files\File.txt
+
+# Recurse through all files in a directory
+Get-ChildItem C:\ -Recurse | `
+	Where-Object { $_.Extension -eq ".txt" 
+		-and $_.LastWriteTime.Date -eq (Get-Date).Date }
+
+

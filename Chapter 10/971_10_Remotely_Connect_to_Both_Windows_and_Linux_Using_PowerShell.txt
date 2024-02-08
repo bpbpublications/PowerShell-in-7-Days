@@ -1,0 +1,60 @@
+# Create a Remote PowerShell Session without a Name
+$session = New-PSSession `
+    -ComputerName "Computer" `
+    -Credential (Get-Credential)
+Enter-PSSession -Session $session
+
+# Create a Remote PowerShell Session with a Name
+$session = New-PSSession `
+    -ComputerName "Computer" `
+    -Credential (Get-Credential) `
+    -Name "Session"
+Enter-PSSession -Session $session
+
+# Create a Windows Remote PowerShell Session using an IP Address
+Enter-PSSession `
+    -ComputerName "192.168.1.101" `
+    -Credential (Get-Credential)
+
+# Create a Remote PowerShell Session over SSH to Linux
+Enter-PSSession `
+    -HostName "Linux" `
+    -UserName "root" `
+    -SSHTransport
+
+# Create a Remote PowerShell Session over SSH to Linux and Store in a Variable
+$session = New-PSSession `
+    -HostName "Linux" `
+    -UserName "root" `
+    -SSHTransport
+Enter-PSSession -Session $session
+
+# Create a Remote PowerShell Session over SSH to Linux on a non-Standard Port
+$session = Enter-PSSession `
+    -HostName "Linux" `
+    -UserName "root" `
+    -Port 2222 `
+    -SSHTransport
+Enter-PSSession -Session $session
+
+# Create a Linux Remote PowerShell Session using an IP Address over SSH
+Enter-PSSession `
+    -HostName "192.168.1.102" `
+    -UserName "root" `
+    -SSHTransport
+
+# Create a Remote PowerShell Session using Invoke-Command
+$credential = Get-Credential
+Invoke-Command `
+    -ComputerName "Computer" `
+    -ScriptBlock {Get-ComputerInfo} `
+    -Credential $credential
+
+# Create a Linux Remote PowerShell Session using Invoke-Command
+Invoke-Command `
+    -HostName "Linux" `
+    -UserName "root" `
+    -SSHTransport `
+    -ScriptBlock {ps aux}
+
+

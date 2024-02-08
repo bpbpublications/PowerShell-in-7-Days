@@ -1,0 +1,101 @@
+# Display available commands
+Get-Command
+Get-Command -Name Get-Process
+Get-Command *Process*
+
+Get-Help Get-Process
+
+Get-Module
+Get-Module -ListAvailable
+
+Get-Command -Module PSReadLine
+
+# Get All Aliases
+Get-Command -CommandType Alias
+
+# Get All Applications
+Get-Command -CommandType Application
+
+# Get All Options
+Get-Command -CommandType All
+
+# Get All Cmdlets
+Get-Command -CommandType Cmdlet
+
+# Get All Configuration
+Get-Command -CommandType Configuration
+
+# Get All External Scripts
+Get-Command -CommandType ExternalScript
+
+# Get All Functions
+Get-Command -CommandType Function
+
+# Get All Filters
+Get-Command -CommandType Filter
+
+# Get All Scripts
+Get-Command -CommandType Script
+
+# Display available command options using the ParameterName property
+Get-Command -ParameterName Path
+Get-Command -ParameterName ComputerName
+Get-Command -ParameterName Credential
+Get-Command -ParameterName Encoding
+Get-Command -ParameterName Name
+Get-Command -ParameterName Filter
+Get-Command -ParameterName Force
+Get-Command -ParameterName Verbose
+Get-Command -ParameterName WarningAction
+Get-Command -ParameterName ErrorAction
+
+# Windows, macOS, and Linux Examples
+Get-Command -Module Microsoft.PowerShell.LocalAccounts -Noun *User*
+Get-Command -Module PowerShellGet -Noun Module
+Get-Command -Noun *Text*
+
+# Using Get-Command with Where-Object. Sort-Object, and Format-List
+Get-Command | Where-Object {$_.Noun -eq 'Process'}
+Get-Command | Where-Object {$_.Noun -eq 'Process'} | Format-List Name, Definition
+Get-Command | Where-Object {$_.Noun -eq 'Process'} | Sort-Object Name | Format-List Name, Definition
+Get-Command | Where-Object {$_.Parameters.Keys -contains 'Path'} | Format-List Name
+Get-Command | Where-Object {$_.Parameters.Keys -contains 'Path'} | Sort-Object -Property {$_.Parameters.Count} | Format-List Name, Parameters
+
+# Get and Execute Command from DLL
+Add-Type -AssemblyName "System.Text.RegularExpressions"
+$escapedString = [System.Text.RegularExpressions.Regex]::Escape("Hello123")
+Write-Output "Escaped String: $escapedString"
+
+$regexObj = New-Object System.Text.RegularExpressions.Regex("\d")
+
+$containsDigit = $regexObj.IsMatch("Hello123")
+Write-Output "Does the string contain a digit? $containsDigit"
+
+
+# Full Examples
+$commands = Get-Command
+
+$filteredCommands = $commands | Where-Object {
+    $_.CommandType -eq 'Cmdlet' -and
+    $_.Source -like 'Microsoft.*' -and
+    $_.Noun -like '*Service*' -and
+    ($_.Parameters.Keys.Count -gt 2)
+}
+
+$sortedFilteredCommands = $filteredCommands | `
+    Sort-Object Source, Noun | `
+        Format-Table -Property Name, Source, `
+            @{Name='ParameterCount';Expression={$_.Parameters.Keys.Count}}
+
+$sortedFilteredCommands
+
+
+# Loading and Using .NET Assemblies
+Add-Type -AssemblyName "System.Text.RegularExpressions"
+$escapedString = [System.Text.RegularExpressions.Regex]::Escape("PowerShell")
+Write-Output "Escaped String: $escapedString"
+$regexObj = New-Object System.Text.RegularExpressions.Regex("\d")
+$containsDigit = $regexObj.IsMatch("PowerShell")
+Write-Output "Does the string contain a digit? $containsDigit"
+
+

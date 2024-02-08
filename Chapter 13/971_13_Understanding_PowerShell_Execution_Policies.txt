@@ -1,0 +1,19 @@
+
+# Check the current execution policy
+Get-ExecutionPolicy
+
+# Set the Execution Policy
+Set-ExecutionPolicy `
+    -ExecutionPolicy Unrestricted `
+    -Scope CurrentUser 
+
+Set-ExecutionPolicy -ExecutionPolicy AllSigned -Scope LocalMachine
+
+Set-ExecutionPolicy -ExecutionPolicy Undefined -Scope CurrentUser
+
+
+# Launch PWSH and ByPass Execution Policy
+pwsh -ExecutionPolicy Bypass
+
+
+

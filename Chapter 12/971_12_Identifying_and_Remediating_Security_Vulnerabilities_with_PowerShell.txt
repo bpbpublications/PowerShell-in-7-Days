@@ -1,0 +1,41 @@
+# Import Module for Windows Update
+Install-Module PSWindowsUpdate
+Import-Module PSWindowsUpdate
+Get-WindowsUpdate
+
+
+# Provide an overview of the firewall profiles and their configurations
+Get-NetFirewallProfile | `
+Select-Object Name, Enabled, DefaultInboundAction, DefaultOutboundAction
+
+
+# List all Inbound Firewall Rules
+Get-NetFirewallRule -Direction Inbound -Enabled True
+
+# Get all File Related Firewall Rules
+Get-NetFirewallRule `
+-Group "*File*" | `
+Select-Object Name, Action, Enabled, Direction
+
+# Enable Firewall Logging
+Set-NetFirewallProfile `
+-All `
+-LogFileName "%systemroot%\System32\LogFiles\Firewall\pfirewall.log" `
+-LogAllowed True `
+-LogBlocked True
+
+
+# List all TCP ports on which the computer is listening
+Get-NetTCPConnection -State Listen
+
+Get-NetTCPConnection | ForEach-Object {
+    if ($_.OwningProcess -eq 0) {
+        Write-Host $_.LocalAddress $_.LocalPort $_.RemoteAddress $_.RemotePort -ForegroundColor Green
+    } else {
+        Write-Host $_.LocalAddress $_.LocalPort $_.RemoteAddress $_.RemotePort -ForegroundColor Red
+    }
+}
+
+
+
+

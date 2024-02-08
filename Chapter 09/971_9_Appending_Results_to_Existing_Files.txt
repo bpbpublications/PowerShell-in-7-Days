@@ -1,0 +1,14 @@
+# Append to Processes.txt File
+Get-Process | Out-File "C:\Processes.txt" -Append
+
+# Append Event Log Details to File
+Get-EventLog -LogName Application | Where-Object { $_.EntryType -eq 'Error' } | Out-File "C:\ErrorLogs.txt" -Append
+
+# Filter Users by Department and Append
+$departments = 'Sales', 'HR', 'Engineering'
+foreach ($dept in $departments) {
+    Get-ADUser -Filter * | 
+    Where-Object {$_.Department -eq $dept} | 
+    Export-Csv -Path "C:\Users\$dept-users.csv" -NoTypeInformation -Append
+}
+

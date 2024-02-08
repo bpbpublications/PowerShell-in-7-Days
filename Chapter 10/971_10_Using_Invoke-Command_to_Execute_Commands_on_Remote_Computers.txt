@@ -1,0 +1,40 @@
+# Get Running Processes from Remote Server using PowerShell
+Invoke-Command `
+    -ComputerName "Server" `
+    -ScriptBlock {Get-Process} `
+    -Credential (Get-Credential)
+
+#  Retrieve List of All Services on a Remote Machine and Filter to Currently Running.
+Invoke-Command -ComputerName RemoteServer -ScriptBlock {
+    Get-Service | Where-Object {$_.Status -eq 'Running'}
+}
+
+# Create a Folder on a Remote Machine using a Local Variable to Specify the Folder Name.
+$folderName = "PowerShell-is-Great"
+Invoke-Command -ComputerName RemoteServer -ScriptBlock {
+    New-Item -Path "C:\Users\Public\$using:folderName" -ItemType Directory
+    Write-Host "Folder: $using:foldername created on 10.0.0.4"
+}
+
+# Remotely Check Disk Space and Return a Custom Object with Formatted Results.
+Invoke-Command -ComputerName RemoteServer -ScriptBlock {
+    $disk = Get-WmiObject Win32_LogicalDisk -Filter "DeviceID='C:'"
+[PSCustomObject]@{
+         FreeSpaceGB = [math]::Round(($disk.FreeSpace / 1GB), 2)
+         TotalSpaceGB = [math]::Round(($disk.Size / 1GB), 2)
+         UsedSpaceGB = [math]::Round((($disk.Size - $disk.FreeSpace) / 1GB), 2)
+     }
+}
+
+# Display the Contents of a Folder within Linux using PowerShell Remoting
+$directory = "/etc"
+Invoke-Command `
+    -HostName "Linux" `
+    -UserName "root" `
+    -SSHTransport `
+    -ScriptBlock {ls $using:directory}
+
+
+
+
+

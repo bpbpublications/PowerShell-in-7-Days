@@ -1,0 +1,39 @@
+# Retrieve System Information
+$info = Get-CimInstance -ClassName Win32_OperatingSystem
+Write-Output "OS Name: $($info.Caption)"
+Write-Output "OS Version: $($info.Version)"
+Write-Output "OS Manufacturer: $($info.Manufacturer)"
+
+# Retrieve all the scheduled tasks enabled on the system.
+Get-ScheduledTask | Where-Object {$_.State -eq 'Ready'}
+
+# Create a new scheduled task to launch Notepad at a specific time.
+$action = New-ScheduledTaskAction -Execute 'Notepad.exe'
+$trigger = New-ScheduledTaskTrigger -At 12:00 -Once
+Register-ScheduledTask Task -Action $action -Trigger $trigger
+
+# Remove a scheduled task named "Task".
+Unregister-ScheduledTask -TaskName "Task01" -Confirm:$false
+
+
+# Retrieve the 10 most recent system events.
+Get-EventLog -LogName System -Newest 10
+
+# Create a new event log.
+New-EventLog –LogName "MyNewLog" –Source "NewLog"
+
+# Remove an event log named "NewLog".
+Remove-EventLog -LogName "NewLog"
+
+
+# Find all .log files in the C:\Logs directory and its subdirectories modified in the last 7 days.
+Get-ChildItem -Path C:\Logs -Filter *.log -Recurse | `
+    Where-Object {$_.LastWriteTime -gt (Get-Date).AddDays(-7)}
+
+# Create a new directory and a new text file.
+New-Item -Path C:\NewDirectory -ItemType Directory
+New-Item -Path C:\NewDirectory\NewFile.txt -ItemType File
+
+# Remove a directory and its contents.
+Remove-Item -Path C:\NewDirectory -Recurse -Force
+

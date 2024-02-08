@@ -1,0 +1,31 @@
+# Install the File Server role
+Install-WindowsFeature -Name FS-FileServer
+
+# Create a new share
+New-SmbShare `
+	-Name "MyPowerShell"`
+	-Path "C:\PowerShell"`
+	-FullAccess "Everyone"
+
+# Set the NTFS permissions
+$Acl = Get-Acl "C:\PowerShell"
+$AccessRule = New-Object System.Security.AccessControl.FileSystemAccessRule("Domain\User", "Modify", "ContainerInherit, ObjectInherit", "None", "Allow")
+$Acl.SetAccessRule($AccessRule)
+Set-Acl "C:\PowerShell" $Acl
+
+# View the share
+Get-SmbShare
+
+# Set the share description
+Set-SmbShare `
+	-Name "MyPowerShell"`
+	-Description "New Share Description"
+
+# View SMB Share permissions
+Get-SmbShareAccess -Name "MyPowerShell"
+
+# Remove the share
+Remove-SmbShare -Name "MyPowerShell" -Force
+
+# Create a new quota
+Set-FsrmQuota -Path "C:\PowerShell" -Size 100GB

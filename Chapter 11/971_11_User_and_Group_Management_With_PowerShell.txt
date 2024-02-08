@@ -1,0 +1,46 @@
+# Create a new local user account with a password
+$Password = Read-Host -AsSecureString
+New-LocalUser' ExampleLocalUser1' -Password $Password -FullName 'Example Local User1' -Description 'Example Local User'
+
+# Retrieve the local user account
+Get-LocalUser -Name 'ExampleLocalUser1'
+
+# Set the User Description
+Set-LocalUser -Name 'ExampleLocalUser1' -Description 'Modified: Example Local User'
+
+# Create a New Local Group
+New-LocalGroup -Name 'ExampleLocalGroup1' -Description 'Example Local Group'
+
+# Retrieve the local group
+Get-LocalGroup -Name 'ExampleLocalGroup1'
+
+# Add the local user to the local group
+Add-LocalGroupMember -Group 'ExampleLocalGroup1' -Member 'ExampleLocalUser1'
+
+# Remove the local user from the local group
+Remove-LocalGroupMember -Group 'ExampleLocalGroup1' -Member 'ExampleLocalUser1'
+
+# Create a new Domain User
+$Password = Read-Host -AsSecureString
+New-ADUser -Name 'DomainUser1' -AccountPassword $Password -Enabled $true -ChangePasswordAtLogon $true -Description 'Example Domain User'
+
+# Retrieve the domain user
+Get-ADUser -Identity 'DomainUser1'
+
+# Set the User Office
+Set-ADUser -Identity 'DomainUser1' -Office 'HQ'
+
+# Create a new Domain Group
+New-ADGroup -Name 'DomainGroup1' -Description 'Example Domain Group' -GroupScope Global -PassThru
+
+# Retrieve the domain group
+Get-ADGroup -Identity 'DomainGroup1'
+
+# Add the domain user to the domain group
+Add-ADGroupMember -Identity 'DomainGroup1' -Members 'DomainUser1'
+
+# Remove the domain user from the domain group
+Remove-ADGroupMember -Identity 'DomainGroup1' -Members 'DomainUser1'
+
+
+

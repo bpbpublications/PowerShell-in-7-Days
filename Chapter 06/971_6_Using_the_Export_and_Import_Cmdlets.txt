@@ -1,0 +1,52 @@
+# Get-Process and Export to CSV
+Get-Process | Export-Csv -Path "C:\Files\Processes.csv"
+
+# Get-Service and Export to XML
+Get-Service | Export-Clixml -Path "C:\Files\Services.xml"
+
+# Get-ChildItem and Export to CSV
+Get-ChildItem -Path C: | Export-Csv -Path "C:\Files\Files.csv"
+
+# Get-ChildItem and Export to XML
+Get-ChildItem | Export-Csv -Path "C:\Files\Files.xml"
+
+# Get Process and Export to XML
+$CustomProcesses = Get-Process | 
+	Where-Object {$_.CPU -gt 10} | 
+		ForEach-Object { [PSCustomObject]@{
+			Name = $_.Name
+			CPU  = $_.CPU
+			Id   = $_.Id
+		}
+} $CustomProcesses | 
+Export-Csv -Path "C:\Files\ProcessQuery.csv" -NoTypeInformation
+
+
+# CSV
+Name,Age,Department
+Susan,28,Engineering
+Robert,32,Marketing
+Jimmy,24,Human Resources
+Alisha,36,IT
+
+# Import CSV
+$users = Import-CSV -Path "C:\Files\Users.csv"
+$users[1].Name
+
+# Export to XML
+$person = @{
+	Name = "Braxton"
+	Age = 28
+	Address = @{
+		Street = "123 North St"
+		City = "Winchester"
+		Zip = "22699"
+	}
+}
+$person | Export-CliXml -Path "C:\Files\Person.xml"
+
+# Import XML
+$person = Import-CliXml -Path "C:\Files\Person.xml"
+
+# Access XML
+$person.Address.City

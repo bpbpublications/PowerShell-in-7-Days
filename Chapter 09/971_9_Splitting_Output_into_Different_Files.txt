@@ -1,0 +1,31 @@
+# Split Processes into Separate Files by CPU
+Get-Process | Where-Object {$_.CPU -gt 10} | Out-File "C:\HighCPUProcesses.txt"
+Get-Process | Where-Object {$_.CPU -le 10} | Out-File "C:\LowCPUProcesses.txt"
+
+
+# Output into Two Files by Error or Information
+Get-EventLog -LogName Application | Where-Object { $_.EntryType -eq 'Error' } | Out-File "C:\ErrorLogs.txt"
+Get-EventLog -LogName Application | Where-Object { $_.EntryType -eq 'Information' } | Out-File "C:\InfoLogs.txt"
+
+
+# Divide Users Between Two Files Based On Department
+Get-ADUser -Filter * | Where-Object {$_.Department -eq 'Sales'} | Export-Csv "C:\SalesUsers.csv" -NoTypeInformation
+Get-ADUser -Filter * | Where-Object {$_.Department -eq 'HR'} | Export-Csv "C:\HRUsers.csv" -NoTypeInformation
+
+
+# Revised Version
+Get-ADUser -Filter * | Where-Object { $_.Department -eq 'Sales' -or $_.Department -eq 'HR' } | 
+ForEach-Object { 
+    if ($_.Department -eq 'Sales') { $_ | Export-Csv "C:\SalesUsers.csv" -NoTypeInformation -Append }
+    elseif ($_.Department -eq 'HR') { $_ | Export-Csv "C:\HRUsers.csv" -NoTypeInformation -Append }
+}
+
+
+# Loop by Role and Export
+$roles = 'Admin', 'Editor', 'Viewer'
+foreach ($role in $roles) {
+    Get-ADUser -Filter * | 
+    Where-Object {$_.Description -eq $role} | 
+    Export-Csv -Path "C:\Users\$role-users.csv" -NoTypeInformation
+}
+

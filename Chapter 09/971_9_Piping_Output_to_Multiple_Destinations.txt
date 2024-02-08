@@ -1,0 +1,11 @@
+# Retrieve Processes and Save File
+Get-Process | Tee-Object -FilePath "C:\Processes.txt"
+
+# Populate a Variable using Tee-Object
+$Services = Get-Service | Where-Object { $_.Status -eq 'Running' } | Tee-Object -Variable RunningServices
+
+# Count the File Lines, Word and Characters
+Get-Content "C:\Example.txt" | Tee-Object -FilePath "C:\ExampleBackup.txt" | Measure-Object -Line -Word -Character
+
+# Create Grid View
+Get-EventLog -LogName Security | Where-Object { $_.EntryType -eq 'Error' } | Tee-Object -FilePath "C:\SecurityErrors.txt" | Out-GridView

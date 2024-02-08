@@ -1,0 +1,41 @@
+# Basic String Manipulation - Join String Values Together
+$MyString = [System.String]::Concat("Hello", " ", "World!")
+
+# Working with Dates - Add 6 Days to Today's Date
+$Today = [System.DateTime]::Now
+$SixDaysFromNow = $Today.AddDays(6)
+
+# Using a .NET Array List
+$ArrayList = New-Object System.Collections.ArrayList
+$null = $ArrayList.Add("Item1")
+$null = $ArrayList.AddRange(@("Item2", "Item3"))
+
+# Manipulating Files - Retrieve the File Size in Bytes
+$FileBytes = [System.IO.File]::ReadAllBytes("C:\Files\File.txt")
+
+# Working with Regular Expressions - Search Using a Specific Pattern
+$Pattern = "[a-z]+"
+$Regex = New-Object System.Text.RegularExpressions.Regex($Pattern)
+$Matches = $regex.Matches("Hello World")
+
+# Use .NET for Zipping Files
+Add-Type -AssemblyName "System.IO.Compression.FileSystem"
+$sourceDirectory = "C:\Files"
+$destinationZipFile = "C:\ZippedFiles\Files.zip"
+[System.IO.Compression.ZipFile]::CreateFromDirectory($sourceDirectory, $destinationZipFile)
+
+# Create a Custom Class
+Add-Type @"
+public class MathUtilities {
+	public static int Add(int a, int b) {
+		return a + b;
+	}
+}
+"@
+[MathUtilities]::Add(11, 3) 
+
+# Use .NET for Unzipping Files
+$destinationExtractFolder = "C:\UnzippedFiles
+[System.IO.Compression.ZipFile]::ExtractToDirectory($destinationZipFile,
+$destinationExtractFolder)
+

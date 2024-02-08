@@ -1,0 +1,22 @@
+# Install Components for SSH on Ubuntu
+sudo apt update
+sudo apt install openssh-server
+sudo systemctl status ssh
+sudo systemctl start ssh
+sudo systemctl enable ssh
+sudo ufw allow ssh
+
+# Restart the SSH Services
+sudo systemctl restart sshd
+or
+sudo service ssh restart
+
+# Remotely Connect to Ubuntu using PowerShell Remoting over SSH
+Enter-PSSession `
+    -HostName <IP> `
+    -UserName <UserName> `
+    -SSHTransport
+
+# Retrieve All Processes within the Remote Session
+Get-Process
+

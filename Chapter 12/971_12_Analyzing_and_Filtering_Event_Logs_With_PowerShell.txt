@@ -1,0 +1,55 @@
+##########################
+## Event Log Management ##
+##########################
+
+# List Event Logs
+Get-EventLog -List
+Get-WinEvent -ListLog *
+
+# Retrieves 50 events from the system event log
+Get-WinEvent -LogName System -MaxEvents 50
+
+# Entries from the last 24 hours of the system log
+Get-WinEvent -FilterHashtable @{
+    LogName = 'System';StartTime = (Get-Date).AddDays(-1);
+}
+
+# Filter By Event Inbound
+Get-WinEvent -FilterHashtable @{
+    LogName = 'System';
+    Level = 2;
+}
+
+Get-WinEvent -FilterHashtable @{
+    LogName = 'System';
+    ID = 7001
+}
+
+# Query using XML
+$filterXml = @'
+<QueryList>
+   <Query Id="0" Path="System">
+     <Select Path="System">
+         *[System[(Level=2) or (EventID=7001)]]
+     </Select>
+   </Query>
+</QueryList>
+'@
+Get-WinEvent -FilterXml $filterXml
+
+
+# Retrieve Detailed Event Log Entries
+Get-WinEvent `
+    -LogName Application -MaxEvents 10 | `
+Select-Object TimeCreated, Message
+
+# Retrieve only Error Event Log Entries
+Get-WinEvent `
+    -FilterHashtable @{
+    LogName='System'; 
+    Level=2; 
+    StartTime=(Get-Date).AddDays(-1)}
+
+
+
+

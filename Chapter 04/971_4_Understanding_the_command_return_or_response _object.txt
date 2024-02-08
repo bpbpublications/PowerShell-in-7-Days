@@ -1,0 +1,51 @@
+# Function with Return
+function Get-Double {
+    param($number)
+    return $number * 2
+}
+
+# Function without Return
+function Get-Double {
+    param($number)
+    $number * 2
+}
+
+# String Objects
+$myText = Get-Content -Path .\MyFile.txt
+$myText.GetType()
+
+# Integer Objects
+$myNum = 5 - 2
+$myNum.GetType()
+
+# Boolean Objects
+$myBool = Test-Path -Path .\MyFile.txt
+$myBool.GetType()
+
+# Array Objects
+$myArray = 1,2,3,4
+$myArray.GetType()
+
+# Custom Objects
+$myObject = New-Object -TypeName PSObject
+$myObject | Add-Member `
+   -Type NoteProperty `
+   -Name "Name" `
+   -Value "Liam Cleary"
+$myObject.GetType() 
+
+
+# Working with Files
+- If you're working with file system objects, you can use Get-Member to discover properties like the file's size, creation time, or last access time.
+Get-ChildItem C:\temp\somefile.txt | Get-Member
+
+# Processing CSV Data
+- Suppose you're processing CSV data and need to figure out the column names in the file. Get-Member can help:
+Import-Csv "C:\Temp\File.csv" | `
+Get-Member -MemberType NoteProperty
+
+# Exploring Custom Objects
+- If you're working with custom objects or unfamiliar objects returned by cmdlets or functions, you can use Get-Member to understand what you're dealing with:
+Get-Process | Get-Member
+
+

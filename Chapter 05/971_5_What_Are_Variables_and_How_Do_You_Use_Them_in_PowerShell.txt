@@ -1,0 +1,30 @@
+# Create a variable called MyVariable and set it equal to the string "Hello, World!"
+$MyVariable = "Hello, World!"
+
+# Add the string ", how are you?" to the end of MyVariable
+$MyVariable += ", how are you?" 
+
+# Scalar Variables:
+$Name = "John Doe"
+$Age = 30
+$IsActive = $true
+
+# Array variables
+$MyArray = 1,2,3,4,5
+
+# HashTable Variables (Associative Arrays): Hash tables allow storing of key-value pairs. The key-value pairs hold either single or multiple values.
+$hashTable = @{Name="John"; Age=25}
+Script Variables: A script or function defines these. They are private to the script or function and are not available outside the scope of that script or function.
+$script:MyScriptVariable = "This is a script variable"
+
+# Global Variables
+$global:MyGlobalVariable = "This is a global variable"
+
+# Environment Variable
+$env:USERNAME
+
+# Object Variables:
+$ProcessObj = Get-Process | Select-Object -First 1
+
+# PSDrive Variables
+New-PSDrive -Name HKCUSoftware -PSProvider Registry -Root HKEY_CURRENT_USER\Software

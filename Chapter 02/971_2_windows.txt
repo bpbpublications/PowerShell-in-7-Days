@@ -1,0 +1,15 @@
+# Check the current version of PowerShell 
+$PSVersionTable
+
+# Install a PowerShell Module
+Install-Module PowerShellGet -Force -AllowClobber
+
+
+# Search for the IIS Administration PowerShell module
+Find-Module -Name 'IISAdministration' | Get-Member
+
+# Install a PowerShell module
+Install-Module -Name 'IISAdministration'
+
+# Check the PowerShell module installed
+Get-Module -Name 'IISAdministration'

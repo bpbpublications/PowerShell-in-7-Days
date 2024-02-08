@@ -1,0 +1,25 @@
+# Get all CIM Commands
+Get-Command -Noun *CIM*
+
+# Retrieve operating system information
+Get-CimInstance -ClassName Win32_OperatingSystem
+
+# Retrieve processor information
+Get-CimInstance -ClassName Win32_Processor
+
+# Retrieve disk drive information
+Get-CimInstance -ClassName Win32_LogicalDisk
+
+# Retrieve network adapter information
+Get-CimInstance -ClassName Win32_NetworkAdapter
+
+# Get the CIM instance for the operating system
+$os = Get-CimInstance -ClassName Win32_OperatingSystem
+
+# Use Invoke-CimMethod to shut down the computer
+Invoke-CimMethod `
+    -InputObject $os `
+    -MethodName "Shutdown" 
+
+
+

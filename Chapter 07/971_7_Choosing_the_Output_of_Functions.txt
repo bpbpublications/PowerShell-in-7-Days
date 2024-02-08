@@ -1,0 +1,63 @@
+# Function with parameters and return statement
+function Get-Square {
+    param($Number)
+    $Results = $Number * $Number
+    return $Results
+    "This won't be displayed."
+}
+
+# Function with parameters without return statement
+function Get-Square {
+    param($Number)
+    $Results = $Number * $Number
+    $Results
+    "This will also be displayed."
+}
+
+# Function to test output streams
+function Test-Streams {
+    [CmdletBinding()]
+    param($InputValue)
+
+    Write-Output "This is the output: $InputValue"
+    Write-Error "This is an error: $InputValue"
+    Write-Verbose "This is verbose: $InputValue" -Verbose
+}
+
+# Create Message function
+function Get-Message {
+    param($Name)
+    Write-Output "Hello, $Name!"
+    Write-Host "This message is only for display."
+}
+
+Get-Message
+
+# Create function to get file details
+function Get-FileDetails {
+    param($FilePath)
+    $Size = (Get-Item $FilePath).length
+    $CreationTime = (Get-Item $FilePath).creationTime
+    Write-Output "File Size: $Size, Creation Time: $CreationTime"
+}
+
+Get-FileDetails
+
+# Create function to get file details output as object
+function Get-FileDetails {
+    param($FilePath)
+    $FileItem = Get-Item $FilePath
+
+    $OutputObject = [PSCustomObject]@{
+    Size = $FileItem.length
+    CreationTime = $FileItem.creationTime
+    }
+    Write-Output $OutputObject
+}
+
+
+
+
+
+
+

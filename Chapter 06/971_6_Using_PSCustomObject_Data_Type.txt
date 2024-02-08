@@ -1,0 +1,43 @@
+# Creating a custom object
+$fruit = [PSCustomObject]@{
+	Name = 'Apple'
+	Color = 'Red'
+}
+$fruit
+
+# Adding a property to an existing object
+$fruit | Add-Member -MemberType NoteProperty `
+	-Name 'Taste'`
+	-Value 'Sweet'
+$fruit
+
+# Creating a custom object with nested properties
+$fruitBag = [PSCustomObject]@{
+	BagColor = 'Blue'
+	Fruits = [PSCustomObject]@{
+ 		Apple = 'Red'
+		Banana = 'Yellow'
+	}
+}
+$fruitBag
+
+# Creating a custom object with an array of objects
+$fruitsList = @(
+	[PSCustomObject]@{
+		Name = 'Apple'
+		Color = 'Red'
+	},
+	[PSCustomObject]@{
+		Name = 'Banana'
+		Color = 'Yellow'
+	}
+)
+$fruitsList
+
+# Creating a custom object from a process
+$process = Get-Process | Select-Object -First 1
+$customProcess = [PSCustomObject]@{
+	Name = $process.ProcessName
+	MemoryMB = $process.WorkingSet / 1MB -as [int]
+}
+$customProcess

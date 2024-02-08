@@ -1,0 +1,61 @@
+# Install Active Directory
+Install-WindowsFeature -Name AD-Domain-Services -IncludeManagementTools
+
+# Promote to a Domain Controller
+$SafeModePassword = ConvertTo-SecureString 'Pass@word1' -AsPlainText -Force
+Install-ADDSDomainController `
+	-DomainName "example.local"`
+	-InstallDns `
+	-DatabasePath "C:\Windows\NTDS"`
+	-SysvolPath "C:\Windows\SYSVOL" `
+	-LogPath "C:\Windows\NTDS\Logs" `
+	-NoRebootOnCompletion $true `
+	-SafeModeAdministratorPassword $SafeModePassword `
+	-Force
+
+# Setup the Domain
+Install-ADDSForest -DomainName "example.local" -InstallDNS
+
+$SafeModePassword = ConvertTo-SecureString 'Pass@word1' -AsPlainText -Force
+
+$HashArguments = @{
+	CreateDNSDelegation = $false
+	DatabasePath = "C:\Windows\NTDS"
+	DomainMode = "WinThreshold"
+	DomainName = "example.local"
+       DomainNetbiosName = "EXAMPLE"
+	ForestMode = "WinThreshold"
+       InstallDns = $true
+	LogPath = "C:\Windows\NTDS\Logs"
+	SysvolPath = "C:\Windows\SYSVOL"
+        SafeModeAdministratorPassword = $SafeModePassword
+        Force = $true
+}
+Install-ADDSForest @HashArguments
+
+# Install the Remote Server Administration Tools (RSAT) Module
+Install-WindowsFeature -Name RSAT-AD-PowerShell
+
+# Import the Active Directory Module
+Import-Module ActiveDirectory
+
+# Retrieve Domain Forest Details
+Get-ADForest
+
+# Retrieve Specific Domain Details
+Get-ADDomain -Identity "example.local"
+
+# Create a New Organizational Unit
+New-ADOrganizationalUnit -Name "Example" -Path "DC=example, DC=local"
+
+# Display details about the Organizational Unit (OU)
+Get-ADOrganizationalUnit -Filter 'Name -like "*Example*"'
+
+# Install the Group Policy Object (GPO) PowerShell Module
+Install-WindowsFeature -Name GPMC
+
+# Import the Group Policy Object (GPO) Module
+Import-Module GroupPolicy
+
+# List all Group Policy Objects (GPOs)
+Get-GPO -All

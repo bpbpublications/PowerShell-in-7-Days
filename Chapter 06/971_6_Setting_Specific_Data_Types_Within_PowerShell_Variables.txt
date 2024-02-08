@@ -1,0 +1,76 @@
+# PowerShell Data Types
+[string]$Name = "James Smith"
+[int]$Age = 40
+[bool]$IsMarried = $true
+
+# PowerShell Arrays
+[string[]]$fruits = "Apple", "Banana", "Cherry"
+
+# PowerShell Hash Tables
+[hashtable]$person = @{
+	Name = "James Smith"
+	Age = 40
+	City = "New York"
+}
+
+# PowerShell Objects
+[PSCustomObject]$employee = @{
+	FirstName = "Lucy"
+	LastName = "Smith"
+	Department = "Human Resources"
+}
+
+# Hashtable with nested objects
+[hashtable]$organizationDetails = @{
+    IT = @{
+        Manager  = "James Smith"
+        Projects = @{
+            Project1 = @{
+                Name      = "Infrastructure Upgrade"
+                StartDate = [datetime]"2023-01-01"
+                EndDate   = [datetime]"2023-12-31"
+                Employees = [string[]]@("Alice", "Bob", "Charlie")
+            }
+            Project2 = @{
+                Name      = "App Development"
+                StartDate = [datetime]"2023-02-01"
+                EndDate   = [datetime]"2023-10-31"
+                Employees = [string[]]@("David", "Eva")
+            }
+        }
+    }
+    HR = @{
+        Manager  = "Lucy Smart"
+        Projects = @{
+            Project1 = @{
+                Name      = "Recruitment Drive"
+                StartDate = [datetime]"2023-03-01"
+                EndDate   = [datetime]"2023-06-30"
+                Employees = [string[]]@("Frank", "Grace")
+            }
+        }
+    }
+}
+
+# Object with nested objects
+[PSCustomObject]$book = @{
+    Title = "Advanced PowerShell Techniques"
+    PublishedDate = [datetime] "2022-01-15"
+    ISBN = "123-4567890"
+    Authors = @(
+        [PSCustomObject]@{
+            FirstName = "Anna"
+            LastName = "Bell"
+            BirthDate = [datetime] "1990-05-20"
+            Nationality = "American"
+            OtherBooks = [string[]]@("PowerShell Basics", "PowerShell for Sysadmins")
+        },
+        [PSCustomObject]@{
+            FirstName = "Chris"
+            LastName = "Brown"
+            BirthDate = [datetime] "1985-11-12"
+            Nationality = "Canadian"
+            OtherBooks = [string[]]@("Windows Administration", "Azure 101")
+        }
+    )
+}

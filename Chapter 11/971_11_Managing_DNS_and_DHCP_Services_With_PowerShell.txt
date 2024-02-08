@@ -1,0 +1,46 @@
+# Install DNS Server Role
+Install-WindowsFeature -Name DNS -IncludeManagementTools
+
+# Create a DNS A Record
+Add-DnsServerResourceRecordA `
+	-Name "HostName"`
+	-ZoneName "domain.com"`
+	-IPv4Address "192.168.1.1"
+
+# Get DNS A Record
+Get-DnsServerResourceRecord -ZoneName "domain.com"
+
+# Remove DNS A Record
+Remove-DnsServerResourceRecord `
+	-ZoneName "domain.com"`
+	-Name "HostName"`
+	-RRType "A"
+
+# Create a DNS A Record 
+Add-DnsServerResourceRecordA `
+	-Name "HostName"`
+	-ZoneName "domain.com"`
+	-IPv4Address "192.168.1.2"
+
+# Install DHCP Server Role
+Install-WindowsFeature -Name DHCP -IncludeManagementTools
+
+# Create a DHCP Scope
+Add-DhcpServerv4Scope `
+	-Name "Scope1"`
+	-StartRange "192.168.1.10" `
+	-EndRange "192.168.1.100" `
+	-SubnetMask 255.255.255.0
+
+# Add a DHCP Reservation
+Add-DhcpServerv4Reservation `
+	-ScopeId "192.168.1.0" `
+	-IPAddress "192.168.1.50"`
+	-ClientId "MAC_Address_of_Device"
+
+# Get DHCP Reservation
+Get-DhcpServerv4Lease -ScopeId "192.168.1.0"
+
+# Remove DNS A Record
+Resolve-DnsName -Name "hostname.domain.com"
+

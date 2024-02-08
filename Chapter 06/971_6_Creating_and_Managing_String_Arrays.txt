@@ -1,0 +1,34 @@
+
+# Arrays and Lists
+$MyArray = ("Apple", "Banana", "Cherry")
+$MyArray += "Pear"
+
+# Create an ArrayList
+$MyList = [System.Collections.ArrayList]@(
+	"Apple", 
+	"Banana", 
+	"Cherry") 
+
+# Add a Value to the List
+$MyList.Add("Pear")
+$MyList
+
+# Remove a Value from the List
+$MyList.Remove("Banana")
+$MyList
+
+# Search for a Value in the List
+$MyArray | Where-Object { $_ -like '*A*' }
+
+# Create another List
+$MyExtraList = ("Grape", "Kiwi", "Mango")
+$MyFruitsList = $MyList + $MyExtraList
+
+# Compare Lists
+$MyCheckList = ("Apple", "Passionfruit", "Cherry", "Guava")
+$MyCommonList = $MyFruitsList | Where-Object { $_ -in $MyCheckList } 
+
+# Use Slicing with a List
+$MySlicedList = $MyFruitsList[1..3]  
+
+

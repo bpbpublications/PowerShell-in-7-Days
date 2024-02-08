@@ -1,0 +1,147 @@
+# Try the Command and Capture Error
+Try {
+    Get-Item "NonexistentPath" -ErrorAction Stop
+}
+Catch {
+    Write-Host "An error occurred: $_"
+}
+
+
+# Try the Commands and Process Each Error
+Try {
+    [int]$value = "TestString"
+    Get-Item "NonexistentPath" -ErrorAction Stop
+}
+Catch [System.InvalidCastException] {
+    Write-Host "Format issue detected: $_"
+}
+Catch {
+    Write-Host "General error: $_"
+}
+
+
+# Try the Commands and Process the Error, including Displaying the Message
+Try {
+    [int]$value = "TestString"
+    Get-Item "NonexistentPath" -ErrorAction Stop
+}
+Catch [System.InvalidCastException] {
+    Write-Host "Format issue detected: $_"
+}
+Catch {
+    Write-Host "General error: $_"
+}
+Finally {
+    Write-Host "Script execution completed!"
+}
+
+
+# Stop Code Execution when Error Raised
+$ErrorActionPreference = "Stop"
+Try {
+    Get-Item "NonexistentPath"
+}
+Catch [System.InvalidCastException] {
+    Write-Host "Format issue detected: $_"
+}
+Catch {
+    Write-Host "General error: $_"
+}
+Finally {
+    Write-Host "Script execution completed!"
+}
+
+
+# Use Out-File to Create an Error Log File
+$ErrorActionPreference = "Stop"
+
+Try {
+    [int]$value = "TestString"
+    Get-Item "NonexistentPath"
+}
+Catch [System.InvalidCastException] {
+    Write-Host "Format issue detected: $_"
+    "$_" | Out-File "errorlog.txt" -Append
+}
+Catch {
+    Write-Host "General error: $_"
+    "$_" | Out-File "errorlog.txt" -Append
+}
+Finally {
+    Write-Host "Script execution completed!"
+}
+
+
+# Stop Code Execution and Display Thrown Error Message
+$ErrorActionPreference = "Stop"
+
+Try {
+    $age = 15
+    if ($age -lt 16) {
+        throw "You must be at least 16 years old."
+    }
+    [int]$value = "TestString"
+    Get-Item "NonexistentPath"
+}
+Catch [System.InvalidCastException] {
+    Write-Host "Format issue detected: $_"
+    "$_" | Out-File "errorlog.txt" -Append
+}
+Catch {
+    Write-Host "General error: $_"
+    "$_" | Out-File "errorlog.txt" -Append
+}
+Finally {
+    Write-Host "Script execution completed!"
+}
+
+
+# Error Message Outcomes Using a Function
+function Invoke-DemonstrateErrors {
+    param(
+        [int]$AgeValue = 15,
+        [string]$StringValue = "TestString",
+        [string]$PathValue = "NonexistentPath"
+    )
+
+    $ErrorActionPreference = "Stop"
+
+    Try {
+        $age = $AgeValue
+        if ($age -lt 16) {
+            throw "You must be at least 16 years old."
+        }
+        [int]$value = $StringValue
+        Get-Item $PathValue
+    }
+    Catch [System.InvalidCastException] {
+        Write-Host "Format issue detected: $_"
+        "$_" | Out-File "errorlog.txt" -Append
+    }
+    Catch {
+        Write-Host "General error: $_"
+        "$_" | Out-File "errorlog.txt" -Append
+    }
+    Finally {
+        Write-Host "Script execution completed!"
+    }
+}
+
+Invoke-DemonstrateErrors
+
+Invoke-DemonstrateErrors -AgeValue 16 -StringValue "Test"
+
+Invoke-DemonstrateErrors `
+-AgeValue 16 `
+-StringValue 15 `
+-PathValue "C:\Test"
+
+Invoke-DemonstrateErrors `
+-AgeValue 16 `
+-StringValue 15 `
+-PathValue "C:\Files"
+
+
+
+
+

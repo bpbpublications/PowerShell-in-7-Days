@@ -1,0 +1,32 @@
+
+# Optional Parameter
+function Get-Animal {
+    param(
+        $AnimalHabitat = "Savannah",
+        $AnimalType,
+        $AnimalColor
+        )
+    Write-Output "The $AnimalType from $AnimalHabitat is $AnimalColor in Color"
+}
+
+Get-Animal -AnimalType 'Lion' -AnimalColor 'Golden' -AnimalHabitat 'Africa'
+
+
+# Using Integers
+function Add-Numbers {
+    param([int]$Number1, [int]$Number2)
+    Write-Output ($Number1 + $Number2)
+}
+
+
+# Using Hash Tables
+function Get-Names {
+    param([string[]]$Names)
+    $Names | ForEach-Object { Write-Output "Name: $_" }
+}
+
+Get-Names -Names "Susan", "David", "Maria", "Sophie", "Oliver", "Ananya"
+
+
+
+

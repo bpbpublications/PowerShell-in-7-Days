@@ -1,0 +1,39 @@
+# Install Active Directory Domain Services
+Install-WindowsFeature -Name AD-Domain-Services
+
+# Promote this server to a domain controller
+Install-ADDSDomainController -DomainName "example.local"
+
+# Move the PDC Emulator role to this server
+Move-ADDirectoryServerOperationMasterRole `
+	-Identity "EXAMPLEDC"`
+	-OperationMasterRole PDCEmulator
+
+# Add a Readonly Domain Controller
+Add-ADDSReadOnlyDomainControllerAccount `
+	-DomainControllerAccountName "EXAMPLEDC" `
+	-DomainName "example.local"`
+	-DelegatedAdministratorAccountName "EXAMPLE\Admin"`
+	-SiteName "Default-First-Site-Name"
+
+
+# Move the RID Master role to this server
+Move-ADDirectoryServerOperationMasterRole `
+	-Identity "EXAMPLEDC"`
+	-OperationMasterRole SchemaMaster, DomainNamingMaster
+
+# Retrieve Global Catalog servers
+Get-ADDomainController -Filter {IsGlobalCatalog -eq $true}
+
+# Uninstall Aa Domain Controller
+Uninstall-ADDSDomainController -DemoteOperationMasterRole
+
+# Retrieve the replication status of the domain controller
+Get-ADReplicationFailure -Scope SITE -Target default
+
+# Retrieve the replication status of the domain controller
+Get-ADReplicationSite -Filter *
+
+# Add a new replication site
+New-ADReplicationSubnet -Name "10.10.0.0/24" -Site "SITE"
+

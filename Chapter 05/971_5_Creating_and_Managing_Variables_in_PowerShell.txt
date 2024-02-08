@@ -1,0 +1,51 @@
+# Create a variable called MyVariable and set it equal to the string "Hello, World!"
+$MyVariable = "Hello, World!"
+
+# Create a variable called MyNumber and set it equal to the number 42
+[int]$MyNumber = 42
+
+# Create a new variable called MyVariable and set it equal to the string "This is a variable."
+New-Variable -Name "MyVariable" -Value "This is a variable."
+
+# Update the value of MyVariable to be "New value."
+$MyVariable = "New value."
+
+# Empty the value of MyVariable
+Clear-Variable -Name "MyVariable"
+$MyVariable = $null
+
+# Delete the variable MyVariable
+Remove-Variable -Name "MyVariable"
+
+# Set the Variable to Read-Only
+Set-Variable -Name "MyVariable" -Option ReadOnly
+
+# Create Global Variable
+$global:MyVariable = 10
+Set-Variable -Name "MyVariable" -Scope Global
+
+# Retrieve the value of MyVariable
+Get-Variable -Name "MyVariable"
+
+# Use Get-Variable to retrieve value
+$MyVariable = 10
+Get-Variable -Name MyVariable 
+
+
+# Use Set-Variable to set the value
+Set-Variable -Name MyVariable -Value 20
+Write-Host $MyVariable
+
+# Create a New Variable using New-Variable
+New-Variable -Name MyVariable -Value 30
+Write-Host $MyVariable 
+
+# Remove a Variable using Remove-Variable
+Remove-Variable -Name MyVariable
+Write-Host $MyVariable
+
+# Clear the value of a Variable using Clear-Variable
+Clear-Variable -Name MyVariable
+Write-Host $MyVariable
+
+

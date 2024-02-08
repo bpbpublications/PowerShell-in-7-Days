@@ -1,0 +1,32 @@
+# Sort Files into Two Outputs Based on Size
+Get-ChildItem "C:\Files" | ForEach-Object {
+    if ($_.Length -gt 1MB) {
+        $_ | Out-File "C:\LargeFiles.txt" -Append
+    } else {
+        $_ | Out-File "C:\SmallFiles.txt" -Append
+    }
+}
+
+
+# Check if Each User Directory Exists
+$users = Get-Content "C:\UsersList.txt"
+foreach ($user in $users) {
+    $status = Test-Path "C:\Users\$user"
+    $output = "$user exists: $status"
+    if ($status) {
+        $output | Out-File "C:\ExistingUsers.txt" -Append
+    } else {
+        $output | Out-File "C:\NonExistingUsers.txt" -Append
+    }
+}
+
+
+# Use a Switch Statement to Categorize Files
+$items = Get-ChildItem "C:\Files"
+foreach ($item in $items) {
+    switch ($item.Extension) {
+        ".txt" { $item | Out-File "C:\TextFiles.txt" -Append }
+        ".log" { $item | Out-File "C:\LogFiles.txt" -Append }
+        default { $item | Out-File "C:\OtherFiles.txt" -Append }
+    }
+}

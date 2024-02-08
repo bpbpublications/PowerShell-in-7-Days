@@ -1,0 +1,45 @@
+# Get-Process 
+$Processes = "explorer", "winlogon"; Get-Process -Name $Processes
+
+# Get Files
+$Files = Get-ChildItem -Path C:\Documents; $Files| ForEach-Object { $_.Name }
+
+# Show Details of a Person
+function Show-Details ($Name, $Age) {
+    Write-Host "Name: $Name, Age: $Age"
+}
+
+$Name = "Alice"
+$Age = 30
+
+Show-Details -Name $Name -Age $Age
+
+# Get-ADUser 
+$Users = Get-ADUser -Filter *; $Users | Where-Object { $_.Enabled -eq $true } | ForEach-Object { $_.Name } 
+
+
+# Splatting
+$Params = @{
+    Path = "C:\Documents"
+    Filter = "*.txt"
+}
+Get-ChildItem @Params
+
+
+# Function for getting user information
+function Get-UserInformation {
+    [CmdletBinding()]
+    param (
+        [Parameter(ValueFromPipeline=$true)]
+        [string]$UserName
+    )
+
+    process {
+        Write-Host "Processing user: $UserName"
+    }
+}
+"Sue", "David", "Tom", "Lucy" | Get-UserInformation
+
+
+
+

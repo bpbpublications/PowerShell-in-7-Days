@@ -1,0 +1,11 @@
+
+# Check if PowerShell is running in Constrained Mode
+$ExecutionContext.SessionState.LanguageMode 
+
+# Create new Policy
+New-CIPolicy -Level Publisher -FilePath "C:\PowerShell\Policy.xml" 
+
+# Set to Constrained Mode
+$ExecutionContext.SessionState.LanguageMode = "ConstrainedLanguage" 
+
+

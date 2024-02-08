@@ -1,0 +1,56 @@
+# View the available PowerShell modules within Windows
+Get-Module -ListAvailable
+
+# Retrieve modules included with PowerShell, use the "PS" prefix
+Get-Module -ListAvailable | Where-Object { $_.Name -like "PS*" }
+
+# Find modules for PowerShell 7
+Get-Module -ListAvailable | Where-Object { 
+    $_.Path -like "C:\Program Files\PowerShell\7\Modules\*" 
+}
+
+Get-Module -ListAvailable | Where -Object {$_.Version -like "7*"}
+
+# Find the Microsoft.PowerShell.Utility module
+Get-Module Microsoft.PowerShell.Utility
+
+# Find modules where the name contains 'Security'
+Get-Module -ListAvailable | Where-Object { $_.Name -like "*Security*" }
+
+# View available commands
+(Get-Module -Name Microsoft.WSMan.Management ` 
+    -ListAvailable).ExportedCommands.Values | Select-Object -Property Name
+
+(Get-Module -Name ActiveDirectory ` 
+    -ListAvailable).ExportedCommands.Values | Select-Object -Property Name
+
+# Import a module
+Import-Module "Module Name"
+Import-Module -Name PowerShellGet
+Import-Module -Name PowerShellGet -MinimumVersion 2.0.0 -MaximumVersion 2.9.9
+Import-Module -Name PowerShellGet -Global
+Import-Module -Name PowerShellGet -PassThru
+Import-Module -Name PowerShellGet -AllowClobber
+Import-Module -Name PowerShellGet -Prefix "PG"
+ 
+# Import the Active Directory module into Windows
+Import-Module ActiveDirectory
+Get-ADUser -Filter * | Select-Object -First 10
+
+# Import the Microsoft.PowerShell.Management module into Linux
+Import-Module Microsoft.PowerShell.Management
+Get-ChildItem -Path / -File | Select-Object -First 10
+
+# Import the PowerShellGet module into macOS
+Import-Module PowerShellGet
+Find-Module -Tag 'Azure'
+
+
+
+
+
+
+
+
+
+

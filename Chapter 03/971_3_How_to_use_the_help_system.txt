@@ -1,0 +1,28 @@
+# Display information about the Get-Process cmdlet
+Get-Help Get-Process
+
+# View basic help information
+Get-Help Get-Process
+
+# View detailed help information
+Get-Help Get-Process -Detailed
+
+# View all the help information
+Get-Help Get-Process -Full
+
+# View examples from the help information
+Get-Help Get-Process -Examples
+
+# View parameter-specific help information for the specified command
+Get-Help Get-Process -Parameter Name
+
+# View all the help information in a window
+Get-Help Get-Process -ShowWindow
+
+# Return all help topics that include "process" in their name
+Get-Help *process
+
+# Return command help searching for the word "remoting" in the name
+Get-Help -Name Remoting
+Get-Help -Name Remoting -Category Cmdlet
+

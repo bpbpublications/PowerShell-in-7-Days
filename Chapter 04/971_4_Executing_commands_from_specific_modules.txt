@@ -1,0 +1,39 @@
+Import-Module NetTCPIP
+Get-NetIPAddress
+
+Import-Module ActiveDirectory
+Get-ADUser -Filter 'Name -like "Liam Cleary"'
+
+Import-Module Microsoft.PowerShell.Management
+Get-EventLog -LogName System -Newest 5
+
+Import-Module NetAdapter
+Get-NetAdapter
+
+Import-Module Storage
+Get-Volume
+
+Import-Module PackageManagement
+Find-Package nano
+
+Install-Module -Name SqlServer
+Import-Module SqlServer
+Get-SqlDatabase -ServerInstance 'localhost'
+
+
+# Custom Local Modules
+function Say-Hello {
+param(
+        [Parameter(Mandatory=$true)]
+        [string]$Name
+    )
+    Write-Host ("Hello, " + $Name)
+}
+Export-ModuleMember -Function Say-Hello
+
+Import-Module .\MyModule.psm1
+
+Get-Module -Name MyModule
+
+Say-Hello -Name "Liam Cleary"
+

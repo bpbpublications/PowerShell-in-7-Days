@@ -1,0 +1,109 @@
+######################
+## General Commands ##
+######################
+
+# Display the Total CPU Usage Percentage
+Get-Counter -Counter "\Processor(_Total)\% Processor Time"
+Get-Counter -Counter "\Processor(_Total)\% Processor Time" -SampleInterval 1 -MaxSamples 5 | Select-Object -ExpandProperty CounterSamples | Select-Object -Property Timestamp, CookedValue | Format-Table -AutoSize
+
+# Display the Amount of Free Memory and the Percentage of Memory in use
+Get-Counter -Counter "\Memory\Available MBytes"
+Get-Counter -Counter "\Memory\Available MBytes" -SampleInterval 1 -MaxSamples 5 | Select-Object -ExpandProperty CounterSamples | Select-Object -Property Timestamp, CookedValue | Format-Table -AutoSize
+
+
+#####################
+## Disk Management ##
+#####################
+
+# Displays each Drive's Used and Available Space
+Get-Counter -Counter "\LogicalDisk(*)\Free Megabytes"
+Get-PSDrive -PSProvider FileSystem
+
+# Monitor Disk Read/Write Speeds and Queue Lengths
+Get-Counter -Counter "\LogicalDisk(*)\Disk Read Bytes/sec"
+Get-Counter -Counter "\LogicalDisk(*)\Disk Write Bytes/sec"
+Get-Counter -Counter "\LogicalDisk(*)\Current Disk Queue Length"
+
+# Combine the three queries above into one.
+Get-Counter -Counter "\LogicalDisk(*)\Disk Read Bytes/sec","\LogicalDisk(*)\Disk Write Bytes/sec","\LogicalDisk(*)\Current Disk Queue Length"
+
+#####################
+## Network Traffic ##
+#####################
+
+# Understand the Amount of Network Traffic Handled by Your Interfaces
+Get-Counter -Counter "\Network Interface(*)\Bytes Total/sec"
+Get-Counter -Counter "\Network Interface(*)\Bytes Total/sec" -SampleInterval 1 -MaxSamples 5 | Select-Object -ExpandProperty CounterSamples | Select-Object -Property Timestamp, Path, CookedValue | Format-Table -AutoSize
+
+# Understand the Amount of Network Traffic Handled by Your Interfaces - using Get-NetAdapterStatistics
+Get-NetAdapterStatistics | Select-Object -Property Name, ReceivedBytes, SentBytes
+
+# Understand the Amount of Network Traffic Handled by Your Interfaces - using Get-NetAdapter
+Get-NetAdapter | Select-Object -Property Name, LinkSpeed, Status
+
+# Understand the Amount of Network Traffic Handled by Your Interfaces - using Get-NetAdapterStatistics and Get-NetAdapter
+Get-NetAdapter | Get-NetAdapterStatistics | Select-Object -Property Name, ReceivedBytes, SentBytes
+
+
+########################
+## Process Management ##
+########################
+
+# List All Running Processes with their CPU and Memory Usage
+Get-Counter -Counter "\Process(*)\% Processor Time"
+Get-Counter -Counter "\Process(*)\Working Set - Private"
+
+# List All Running Processes with their CPU and Memory Usage - using Get-Process
+Get-Process | Select-Object -Property ProcessName, CPU, WorkingSet
+
+
+##########################
+## Performance Baseline ##
+##########################
+
+# Create a Custom Counter Set
+$counterSet = @("\Processor(_Total)\% Processor Time", "\Memory\% Committed Bytes In Use", "\PhysicalDisk(_Total)\Disk Read Bytes/sec")
+Get-Counter -Counter $counterSet -SampleInterval 2 -MaxSamples 10 | Select-Object -ExpandProperty CounterSamples | Select-Object -Property Timestamp, Path, CookedValue | Format-Table -AutoSize
+
+# Establishing a Performance Baseline for a Server
+$counterSet = @("\Processor(_Total)\% Processor Time", "\Memory\% Committed Bytes In Use", "\PhysicalDisk(_Total)\Disk Read Bytes/sec")
+$performanceData = Get-Counter -Counter $counterSet -SampleInterval 60 -MaxSamples 60
+$performanceData | Export-Clixml -Path "C:\Path\To\PerformanceBaseline.xml"
+
+
+
+# Get Windows Services that have high Process Usage using Get-Service and Get-Process
+Get-Service | Where-Object -FilterScript { $_.Status -eq "Running" } | ForEach-Object -Process { Get-Process -Id $_.Id } | Select-Object -Property ProcessName, CPU, WorkingSet | Sort-Object -Property CPU -Descending | Format-Table -AutoSize
+
+
+# Get Network Adapter IP Address and DNS Servers
+Get-NetAdapter | Select-Object -Property Name, LinkSpeed, Status, @{Name="IP Address";Expression={ $_.IPv4Address.IPAddress }}, @{Name="DNS Servers";Expression={ $_.IPv4Interface.DNSServer.ServerAddresses }} | Format-Table -AutoSize
+
+
+
+$computerName = "www.google.com"
+$port = 80
+
+# Perform a TCP test using Test-NetConnection
+$tcpTestResult = Test-NetConnection -ComputerName $computerName -Port $port -InformationLevel Detailed
+
+# Perform a ping test using Test-Connection
+$pingTestResult = Test-Connection -ComputerName $computerName -Count 1
+
+# Combine results
+$result = [PSCustomObject]@{
+    ComputerName = $tcpTestResult.ComputerName
+    RemoteAddress = $tcpTestResult.RemoteAddress
+    RemotePort = $tcpTestResult.RemotePort
+    InterfaceAlias = $tcpTestResult.InterfaceAlias
+    InterfaceDescription = $tcpTestResult.InterfaceDescription
+    TcpTestSucceeded = $tcpTestResult.TcpTestSucceeded
+    Latency = $pingTestResult.Latency
+    PingSucceeded = $pingTestResult.StatusCode -eq 0
+    PingReplyDetails = $pingTestResult
+}
+
+# Display the result
+$result | Format-Table -AutoSize
+
+

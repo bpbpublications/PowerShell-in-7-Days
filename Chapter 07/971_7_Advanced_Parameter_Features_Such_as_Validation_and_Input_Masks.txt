@@ -1,0 +1,93 @@
+# Using Validate Range
+function Get-Age {
+    param (
+    [ValidateRange(1,120)]
+    [int]$Age
+    )
+    Write-Output "Your age is $Age years."
+}
+
+Get-Age -Age 30
+
+function Get-Animal {
+    param(
+    $AnimalHabitat = "Savannah",
+    [ValidateSet("Lion", "Elephant", "Buffalo", "Leopard", "Rhinoceros", "Giraffe", "Cheetah", "Hippopotamus")]
+    $AnimalType,
+    $AnimalColor
+    )
+    Write-Output "The $AnimalType from $AnimalHabitat is $AnimalColor in Color"
+}
+
+Get-Animal -AnimalType Lion -AnimalColor Yellow
+
+
+# RegEx
+function Get-PhoneNumber {
+    param (
+    [ValidatePattern('^\(\d{3}\)\s?\d{3}-\d{4}$')]
+    [string]$PhoneNumber
+    )
+    Write-Output "Your phone number is $PhoneNumber."
+}
+
+Get-PhoneNumber -PhoneNumber "(123) 456-7890"
+
+
+# RegEx Social Security Number Function
+function Get-SocialSecurityNumber {
+    param (
+    [ValidatePattern('^\d{3}-\d{2}-\d{4}$')]
+    [ValidateScript({
+        if ($_ -match '^000') {
+        throw "SSN cannot start with '000'."
+    }
+    return $true
+    })]
+    [string]$SSN
+        )
+        Write-Output "Your Social Security Number is $SSN."
+}
+
+Get-SocialSecurityNumber -SSN "000235678"
+Get-SocialSecurityNumber -SSN "123456789"
+Get-SocialSecurityNumber -SSN "123-45-6789"
+
+# Combination of Hash Table and Validate Script
+$AnimalColorLookup = @{
+    'Lion' = 'Tawny';
+    'Elephant' = 'Grey';
+    'Buffalo' = 'Dark Brown';
+    'Leopard' = 'Golden with Black Spots';
+    'Rhinoceros' = 'Grey';
+    'Giraffe' = 'Yellow with Brown Spots';
+    'Cheetah' = 'Golden with Black Spots';
+    'Hippopotamus' = 'Greyish Brown';
+}
+
+function Get-Animal{
+param(
+    [ValidateScript({
+    if ($animalColorLookup.ContainsKey($_)) {
+    $true
+    } else {
+    throw "Animal $_ is not in the known list of animals."
+                }
+                })]
+            [string]$AnimalType
+    )
+    $Color = $AnimalColorLookup[$AnimalType]
+    Write-Output "The typical color of a/an $AnimalType is $Color."
+}
+
+Get-Animal -AnimalType 'Lion'
+Get-Animal -AnimalType 'Giraffe'
+Get-Animal -AnimalType 'Buffalo'
+
+
+
+
+
+
+
+

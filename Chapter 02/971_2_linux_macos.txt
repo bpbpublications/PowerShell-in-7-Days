@@ -1,0 +1,17 @@
+# Install the downloaded Powershell 7 package within Ubuntu Linux
+sudo dpkg -i powershell-lts_7.3.4-1.deb_amd64.deb
+sudo apt-get install -f
+
+# Launch PowerShell 7
+pwsh
+
+# Check the current version of installed PowerShell 
+$PSVersionTable
+
+
+
+# Install Powershell 7 package within macOS
+brew install powershell/tap/powershell
+
+# Check the current version of installed PowerShell 
+$PSVersionTable

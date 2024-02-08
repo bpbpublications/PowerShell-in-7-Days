@@ -1,0 +1,35 @@
+# Display the Message for the Day
+$day = "Wednesday"
+switch ($day) {
+    "Monday" { Write-Output "Start of the work week."}
+    "Wednesday" { Write-Output "Hump day!"}
+    "Friday" { Write-Output "Almost the weekend!"}
+    default { Write-Output "A regular day."}
+}
+
+
+# Using Wildcards in Switch
+$filename = "document.docx"
+switch -Wildcard ($filename) {
+    "*.docx" { Write-Output "Word document" }
+    "*.xlsx" { Write-Output "Excel spreadsheet" }
+    default { Write-Output "Unknown file type"}
+}
+
+
+# Display the Message based on the Age
+$age = 18
+switch ($age) {
+    {$_ -lt 13} { Write-Output "Child" }
+    {$_ -lt 20} { Write-Output "Teenager" }
+    default { Write-Output "Adult"}
+}
+
+
+# Processing Arrays with Switch
+$colors = @("red", "blue", "green")
+switch ($colors) {
+    "red" { Write-Output "Firetruck color" }
+    "blue" { Write-Output "Sky color" }
+    "green" { Write-Output "Grass color" }
+}

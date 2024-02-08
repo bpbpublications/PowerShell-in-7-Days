@@ -1,0 +1,32 @@
+# Perform Windows Updates
+Install-Module PSWindowsUpdate
+Import-Module PSWindowsUpdate
+Get-WindowsUpdate -Install -AcceptAll -AutoReboot 
+
+
+# Review user permissions
+Get-LocalUser | `
+Select-Object Name, Enabled, LastLogon, `
+@{Name="IsAdmin";Expression={$userName = $_.Name
+(Get-LocalGroupMember -Group "Administrators" | `
+Where-Object { $_.Name -like "*\$userName" }).Count -gt 0}} | `
+Format-Table -AutoSize
+
+
+# Set the Execution Policy
+Set-ExecutionPolicy `
+-ExecutionPolicy RemoteSigned `
+-Scope CurrentUser 
+
+
+# Sign a PowerShell Script
+$cert = @(Get-ChildItem cert:\CurrentUser\My -CodeSigningCert)[0]
+Set-AuthenticodeSignature `
+-FilePath "C:\PowerShell\Script.ps1" `
+-Certificate $cert 
+
+# Creating Secure String
+$securePassword = ConvertTo-SecureString "PlainTextPassword" `
+-AsPlainText `
+-Force
+$credential = New-Object System.Management.Automation.PSCredential ("Username", $securePassword) 

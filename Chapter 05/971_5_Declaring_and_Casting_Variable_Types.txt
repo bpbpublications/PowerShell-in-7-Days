@@ -1,0 +1,91 @@
+# Type Safety: Ensures that the variable can only hold values of a particular type, preventing unintended data types from being assigned.
+
+[int]$MyInt = 123
+	try {
+    		$MyInt = "Hello"
+	}
+	catch {
+    		Write-Output "Error: $_"
+	}
+
+# Error Prevention: Helps catch errors early in the development cycle if a variable assigns a wrong type. The following example does not use an explicit type declaration:
+
+$UserAge = "twenty-three"
+if ($UserAge -lt 18) {
+    Write-Output "User is a minor."
+}
+
+The following example uses an explicit type declaration:
+
+[int]$UserAge = "twenty-three"
+if ($UserAge -lt 18) {
+    Write-Output "User is a minor."
+}
+
+# Cast the Variable to an Integer
+$intValue = [int]"42"
+
+
+# Perform Base64 Encoding and Decoding
+$Base64String = "SSBsb3ZlIFBvd2VyU2hlbGw="
+$Bytes = [System.Convert]::FromBase64String($Base64String )
+$Bytes -join ' '
+$DecodedString = [System.Text.Encoding]::UTF8.GetString($Bytes )
+$DecodedString 
+
+# Setting a Double and Integer value
+$doubleValue = 23.567
+Write-Output "Original Double Value: $doubleValue"
+
+$integerValue = [int]$doubleValue
+Write-Output "Casted Integer Value: $integerValue"
+
+# Casting Objects
+$Object = [PSCustomObject]@{
+    Name = "MyFile";
+    FilePath = "C:\Documents\File.txt"
+}
+
+$FileInfo = [System.IO.FileInfo]$Object.FilePath
+
+Write-Output "Type before casting: $($obj.FilePath.GetType().FullName)"
+Write-Output "Type after casting: $($FileInfo.GetType().FullName)"
+
+# Using a custom class
+Class Car {
+    [string]$Brand
+    [int]$Year
+}
+
+$MyObject = [PSCustomObject]@{
+    Brand = 'Ford'
+    Year = '2020'
+}
+
+$Object = [Car]$MyObject
+$Object
+
+# Casting to an IP Address Object$IpString = "192.168.1.254"
+$IpAddress = [System.Net.IPAddress]::Parse($IpString)
+
+Write-Output "Address: $($IpAddress.ToString())"
+Write-Output "Address Family (IPv4 or IPv6): $($IpAddress.AddressFamily)"
+Write-Output "Bytes: $($IpAddress.GetAddressBytes())"
+
+# Casting to a System.ConsoleColor Enumeration
+$Color = [System.ConsoleColor]"Red"
+
+# Parsing for a Date and Time
+$StringDate = "2023-05-27"
+[System.DateTime]::Parse($StringDate) 
+
+# Parsing for a Boolean Value using TryParse()
+$result = 0
+[int]::TryParse("42", [ref]$result)
+[int]::TryParse("NotANumber", [ref]$result) 
+
+# Explicit Date Parsing
+$Date = [DateTime]::Parse("2020-12-31")
+
+
+

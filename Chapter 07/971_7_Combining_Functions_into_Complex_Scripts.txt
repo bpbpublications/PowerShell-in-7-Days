@@ -1,0 +1,63 @@
+# Calculate Area and Perimeter
+function Get-Area {
+    param(
+    [double]$Length,
+    [double]$Width
+    )
+    return $Length * $Width
+}
+
+function Get-Perimeter {
+    param(
+    [double]$Length,
+    [double]$Width
+    )
+    return 2 * ($Length + $Width)
+}
+
+$length = 5.5
+$width = 4.2
+Write-Output "AREA: $(Get-Area -Length $length -Width $width)"
+Write-Output "PERIMETER: $(Get-Perimeter -Length $length -Width $width)"
+
+
+# Combined Functions
+function Get-RectangleProperties {
+    param (
+    [double]$Length,
+    [double]$Width
+    )
+
+    $Area = $Length * $Width
+    $Perimeter = 2 * ($Length + $Width)
+
+    return [PSCustomObject]@{
+    Area = $Area
+    Perimeter = $Perimeter
+    }
+}
+
+$rectangleProperties = Get-RectangleProperties -Length 5.5 -Width 4.2
+$rectangleProperties
+
+
+# Combined 'Get-Greeting' and 'Add-Age' Functions
+function Get-UserGreetingWithAgeUpdate {
+param (
+    [string]$Name,
+    [int]$Age,
+    [int]$YearsToAdd = 1
+)
+
+    $NewAge = $Age + $YearsToAdd
+    $GreetingMessage = "Hello, $Name! You are currently $Age years old. In $YearsToAdd years, you will be $NewAge."
+
+    return $GreetingMessage
+}
+
+$Message = Get-UserGreetingWithAgeUpdate -Name "Kaylen" -Age 40 -YearsToAdd 12
+Write-Output $Message
+
+
+
+

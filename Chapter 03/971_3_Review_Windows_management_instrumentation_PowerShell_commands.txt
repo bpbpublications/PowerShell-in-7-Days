@@ -1,0 +1,59 @@
+# Count of the WMI commands
+(Get-Command -Noun *WMI*).Count
+
+# Get WMI commands
+Get-Command -Noun *WMI*
+
+# Retrieve operating system architecture information
+Get-WmiObject -Class Win32_OperatingSystem
+
+# Retrieve computer information
+Get-WmiObject -Class Win32_ComputerSystem
+
+# Retrieve computer BIOS information
+Get-WmiObject -Class Win32_BIOS
+
+# Retrieve processor information
+Get-WmiObject -Class Win32_Processor
+
+# Retrieve information about the Active Directory domain
+Get-WmiObject -Class Win32_NTDomain
+
+# List all the services on the system
+Get-WmiObject -Namespace "root\CIMv2" -Class Win32_Service
+
+# List all installed software on the system
+Get-WmiObject -Namespace "root\CIMv2" -Class Win32_Product
+
+# List all user accounts in Active Directory
+Get-WmiObject -Namespace "root\directory\LDAP" -Class ds_user
+
+# Invoke-WmiMethod cmdlet to shut down a computer
+$computerName = "localhost"
+$className = "Win32_OperatingSystem"
+$methodName = "Win32Shutdown"
+$shutdownCode = 1 
+$methodParameters = @{ Flags = $shutdownCode; Reserved = 0 }
+
+Invoke-WmiMethod `
+    -ComputerName $computerName `
+    -Class $className `
+    -Name $methodName `
+    -ArgumentList $methodParameters
+
+# Change the Windows Service wuauserv (Windows Update) to Automatic
+$serviceName = "wuauserv"
+$startMode = "Automatic"
+$service = Get-WmiObject -Query "SELECT * FROM Win32_Service WHERE Name = '$serviceName'"
+$service.ChangeStartMode($startMode)
+
+# Remove static IP address configuration from a network adapter
+$staticIP = Get-WmiObject `
+    -Class Win32_NetworkAdapterConfiguration `
+    -Filter "IPEnabled = TRUE"
+$staticIP | Remove-WmiObject
+
+
+
+
+

@@ -1,0 +1,39 @@
+# Install IIS
+Install-WindowsFeature -Name Web-Server -IncludeManagementTools 
+
+# Import IISAdministration module
+Import-Module IISAdministration
+
+# Create a new IIS site
+$siteName = "MyPowerShell"
+$bindingInformation = "*:80:www.example.local"
+$physicalPath = "C:\inetpub\wwwroot\MyPowerShell"
+
+if (-not (Test-Path $physicalPath)) {
+    New-Item -Path $physicalPath -Type Directory
+}
+
+New-IISSite `
+    -Name $siteName `
+    -BindingInformation $bindingInformation `
+    -PhysicalPath $physicalPath
+
+# Get PSDrive
+Get-PSDrive -PSProvider FileSystem 
+
+# Install Print Services
+Install-WindowsFeature -Name Print-Services -IncludeManagementTools
+
+# Get Printers
+Get-Printer 
+
+# Install IIS on multiple servers
+$servers = @("Server1", "Server2", "Server3")
+Invoke-Command `
+    -ComputerName $servers `
+    -ScriptBlock { Install-WindowsFeature `
+    -Name Web-Server -IncludeManagementTools } 
+
+
+
+

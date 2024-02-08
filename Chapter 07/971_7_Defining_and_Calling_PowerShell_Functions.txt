@@ -1,0 +1,47 @@
+# Calling a Function
+function Get-Greeting {
+    return "Hello, World!"
+}
+
+Get-Greeting
+
+
+# Calling a Function with Parameters
+function Get-Greeting {
+    param([string]$Name)
+    return "Hello, $Name!"
+}
+
+Get-Greeting -Name "Liam"
+
+
+# Global Variables
+$global:defaultLanguage = "English"
+
+function Get-Greeting {
+    param(
+    [string]$Name,
+    [string]$Language = $global:defaultLanguage
+    )
+    $Greetings = @{
+        "English" = "Hello"
+        "French" = "Bonjour"
+        "Spanish" = "Hola"
+        "German" = "Hallo"
+        }
+
+    if (-not $Greetings.ContainsKey($Language)) {
+    Write-Warning "Language not supported. Using English as default."
+    $Language = "English"
+    }
+    return "$($Greetings[$Language]), $Name!"
+}
+
+Get-Greeting -Name "Alice" 
+Get-Greeting -Name "Mario" -Language "Spanish"
+Get-Greeting -Name "Charlie" -Language "NonExistent"
+
+
+
+
+

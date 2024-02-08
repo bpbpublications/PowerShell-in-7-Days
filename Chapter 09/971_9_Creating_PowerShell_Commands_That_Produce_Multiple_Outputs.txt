@@ -1,0 +1,76 @@
+# Retrieve List of Running Processes and Services
+function Get-SystemInfo {
+    Get-Process
+    Get-Service
+}
+
+Get-SystemInfo
+
+
+# Add Labels and Use Select-Object
+function Get-SystemInfo {
+    "Processes:"
+    Get-Process | Select-Object -First 5
+    "`nServices:"
+    Get-Service | Where-Object Status -eq 'Running' | Select-Object -First 5
+}
+
+Get-SystemInfo
+
+
+# Output a Custom Object
+function Get-SystemInfo {
+    $processes = Get-Process | Select-Object -First 5
+    $services = Get-Service | Where-Object Status -eq 'Running' | Select-Object -First 5
+
+    [PSCustomObject]@{
+        Processes = $processes
+        Services = $services
+    }
+}
+
+Get-SystemInfo
+
+# Add Parameters
+function Get-SystemInfo {
+    param (
+        [string]$InfoType
+    )
+
+    if ($InfoType -eq "Processes") {
+        Get-Process | Select-Object -First 5
+    } elseif ($InfoType -eq "Services") {
+        Get-Service | Where-Object Status -eq 'Running' | Select-Object -First 5
+    } else {
+        Write-Host "Invalid InfoType specified"
+    }
+}
+
+Get-SystemInfo -InfoType Processes
+
+
+# Same Function but Include Outputting of Files
+function Get-SystemInfo {
+    param (
+        [string]$InfoType
+    )
+
+    $outputPath = "C:\SystemInfo.txt"
+
+    if ($InfoType -eq "Processes") {
+        Get-Process | Select-Object -First 5 | Out-File -FilePath $outputPath -Append
+        "Processes info has been saved to $outputPath"
+    } elseif ($InfoType -eq "Services") {
+        Get-Service | Where-Object Status -eq 'Running' | Select-Object -First 5 | Out-File -FilePath $outputPath -Append
+        "Services info has been saved to $outputPath"
+    } else {
+        Write-Host "Invalid InfoType specified" | Out-File -FilePath $outputPath -Append
+        "Error message has been logged to $outputPath"
+    }
+}
+
+Get-SystemInfo -InfoType Processes
+
+
+
+

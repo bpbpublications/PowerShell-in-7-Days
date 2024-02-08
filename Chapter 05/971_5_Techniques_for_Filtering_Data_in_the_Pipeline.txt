@@ -1,0 +1,42 @@
+# Get all processes that are using more than 10% of the CPU
+Get-Process | Where-Object {$_.CPU -gt 10}
+
+# Get services that are stopped
+Get-Service | Where-Object { $_.Status -eq 'Stopped' } | ForEach-Object { Write-Output $_.DisplayName }
+
+# Get all processes that are using more than 10% of the CPU and output the process name
+Get-Process | Where-Object { $_.CPU -gt 10 } | ForEach-Object { Write-Output $_.ProcessName }
+
+# Get event log entries that are errors and have an event ID less than 1000
+Get-EventLog -LogName System | Where-Object { $_.EntryType -eq 'Error' -and $_.EventID -lt 1000 } | ForEach-Object { Write-Output $_.Message }
+
+# Get all services and output the display name and status
+Get-Service | Select-Object -Property DisplayName, Status
+
+# Get all processes that are using more than 10% of the CPU and output the process name and ID
+Get-Process | Where-Object { $_.CPU -gt 10 -and $_.Id -ne $PID } | ForEach-Object {
+    Write-Host ("Process " + $_.ProcessName + " with ID " `
++ $_.Id + " is using more than 10 CPU.")
+}
+
+# Get all services that are running and output the service name
+Get-Service | ForEach-Object {
+    if ($_.Status -eq 'Running') {
+        Write-Output $_.Name
+    }
+}
+
+# Get event log entries of type Error from the Application log
+Get-EventLog -LogName Application -EntryType Error
+
+
+# Get all services that are running and output the service name
+Get-Service -Name 'w*' | ForEach-Object {
+    if ($_.Status -eq 'Running') {
+        Write-Host ("Service " + $_.DisplayName + " is running.")
+    } else {
+        Write-Host ("Service " + $_.DisplayName + " is not running.")
+    }
+}
+
+

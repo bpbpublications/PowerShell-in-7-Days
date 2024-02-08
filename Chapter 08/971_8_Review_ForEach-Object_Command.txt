@@ -1,0 +1,28 @@
+# Print Numbers from 1 to 5
+1..5 | ForEach-Object { Write-Output $_ }
+
+
+# Print Even Numbers from 1 to 10
+1..10 | ForEach-Object {
+    if ($_ % 2 -eq 0) {
+        Write-Output $_
+    }
+}
+
+
+# List Names of Files with Specific Extensions
+Get-ChildItem -Path "C:\Files" | ForEach-Object {
+    if ($_.Extension -eq ".txt") {
+        Write-Output $_.Name
+    }
+}
+
+
+# Process Multi-Dimensional Arrays
+$matrix = @( @(1,2,3), @(4,5,6), @(7,8,9) )
+$matrix | ForEach-Object {
+    $row = $_
+    $row | ForEach-Object {
+        Write-Output $_
+    }
+}

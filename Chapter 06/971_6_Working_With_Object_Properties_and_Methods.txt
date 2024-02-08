@@ -1,0 +1,24 @@
+
+# Get Word Document and check Length and then delete
+$File = Get-Item -Path "C:\Files\Word-Document.docx"
+$File.Length
+$File.Delete()
+
+# Get all files in a folder modified in the last year
+$Files = Get-ChildItem "C:\Files" | `
+	Where-Object {$_.LastWriteTime -lt (Get-Date).AddYears(-1)}
+
+# Get Methods and Properties of the Disk Drive
+$drive = Get-Drive C:
+$drive | Get-Member
+
+# Get Methods and Properties of the Process
+$process = Get-Process | Select-Object -First 1
+$process | Get-Member
+
+# Get Methods and Properties of the String
+$string = "Hello, PowerShell!"
+$string | Get-Member
+
+
+

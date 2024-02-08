@@ -1,0 +1,15 @@
+# Create a Certificate and Sign a Script
+$cert = New-SelfSignedCertificate `
+-DnsName "CodeSigningCert" `
+-CertStoreLocation "Cert:\CurrentUser\My" `
+-Type CodeSigningCert
+
+$cert = @(Get-ChildItem cert:\CurrentUser\My -CodeSigningCert)[0]
+Set-AuthenticodeSignature `
+-FilePath "C:\PowerShell\Script.ps1" `
+-Certificate $cert
+
+
+# Check the Signature of a Script
+Get-AuthenticodeSignature -FilePath "C:\PowerShell\Script.ps1"
+

@@ -1,0 +1,106 @@
+# Simulate excessive memory by executing the following PowerShell.
+$end = (Get-Date).AddMinutes(2)
+    while ((Get-Date) -lt $end) {
+    [math]::Sqrt((Get-Random -Min 1 -Max 100))
+}
+
+# Reviews the effect on CPU
+Get-Process | `
+Sort-Object -Property CPU -Descending | `
+Select-Object -First 10 -Property Id, ProcessName, CPU
+
+# Example Memory Consumption Function
+function Consume-Memory {
+    param (
+        [int]$MB
+    )
+
+$bytes = New-Object byte[] ($MB * 1024 * 1024)
+    $random = New-Object Random
+    $random.NextBytes($bytes)
+}
+
+$startTime = Get-Date
+$duration = New-TimeSpan -Minutes 5
+$chunkSizeMB = 10
+
+while ((Get-Date) -lt $startTime.Add($duration)) {
+    Write-Host "Allocating $chunkSizeMB MB of memory." -ForegroundColor Red
+    Consume-Memory -MB $chunkSizeMB
+    Start-Sleep -Seconds 10
+}
+
+# Review the effect
+Get-Process | `
+Sort-Object -Property WS -Descending | `
+Select-Object -First 10 -Property Id, ProcessName, WS
+
+# Returns the services, their internal processes, and CPU and Memory usage
+Get-Service | `
+Where-Object -FilterScript { $_.Status -eq "Running" } | `
+ForEach-Object -Process { Get-Process } | `
+Select-Object -Property ProcessName, CPU, WorkingSet | `
+Sort-Object -Property CPU -Descending | `
+Format-Table -AutoSize
+
+# Stop a Process
+Stop-Process -Id 2376 -Force
+
+# Create a Scheduled Task for Monitoring System Resources
+$scriptBlock = {
+    $monitoringData = @()
+    $cpuUsage = Get-Counter `
+        -Counter "\Processor(_Total)\% Processor Time" `
+        -ErrorAction SilentlyContinue
+    $monitoringData += [PSCustomObject]@{
+        ResourceType = "CPU Usage"
+        Value = "$($cpuUsage.CounterSamples.CookedValue)%"
+}
+
+$memoryUsage = Get-Counter `
+    -Counter "\Memory\Available MBytes" `
+    -ErrorAction SilentlyContinue
+    $monitoringData += [PSCustomObject]@{
+        ResourceType = "Available Memory"
+        Value = "$($memoryUsage.CounterSamples.CookedValue) MB"
+}
+
+$diskUsage = Get-PSDrive -PSProvider FileSystem
+foreach ($disk in $diskUsage) {
+    $monitoringData += [PSCustomObject]@{
+        ResourceType = "Disk Space on Drive $($disk.Name)"
+        Value = "Used - $($disk.Used / 1GB) GB, Free - $($disk.Free / 1GB) GB"
+    }
+}
+
+$networkTraffic = Get-Counter `
+    -Counter "\Network Interface(*)\Bytes Total/sec" `
+    -ErrorAction SilentlyContinue
+    foreach ($interface in $networkTraffic.CounterSamples) {
+        $monitoringData += [PSCustomObject]@{
+            ResourceType = "Network Traffic on $($interface.InstanceName)"
+            Value = "$($interface.CookedValue) Bytes/sec"
+    }
+}
+
+$monitoringData | Export-Clixml -Path "C:\PowerShell\MonitoringData.xml"
+}
+
+$scriptPath = "C:\PowerShell\MonitoringData.ps1"
+$scriptBlock | Out-File -FilePath $scriptPath
+
+$trigger = New-ScheduledTaskTrigger `
+    -AtStartup -RandomDelay (New-TimeSpan -Minutes 30)
+
+$action = New-ScheduledTaskAction `
+    -Execute "`"C:\Program Files\PowerShell\7\pwsh.exe`"" `
+    -Argument "-File `"$scriptPath`""
+
+Register-ScheduledTask `
+    -TaskName "SystemPerformanceMonitoring" `
+    -Trigger $trigger `
+    -Action $action `
+    -Description "System Performance Monitoring Task"
+
+
+

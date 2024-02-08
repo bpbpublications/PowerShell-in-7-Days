@@ -1,0 +1,47 @@
+# The first example is handy for system administrators who must
+# separate logs based on their types and send them to different directories.
+
+$errorLogPath = "C:\Logs\ErrorLogs\"
+$infoLogPath = "C:\Logs\InfoLogs\"
+
+Get-Content "C:\Logs\AllLogs.log" | ForEach-Object {
+    if ($_ -match "ERROR") {
+        Add-Content -Path ($errorLogPath + "errors.log") -Value $_
+    } elseif ($_ -match "INFO") {
+        Add-Content -Path ($infoLogPath + "info.log") -Value $_
+    }
+}
+
+
+# The second example exports user data to separate 
+# CSV files based on their departments.
+
+$users = Get-ADUser -Filter *
+
+$users | ForEach-Object {
+    $department = $_.Department
+    if ($department) {
+        $_ | Export-Csv "C:\Users\$department-users.csv" -NoTypeInformation -Append
+    } else {
+        $_ | Export-Csv "C:\Users\NoDepartment-users.csv" -NoTypeInformation -Append
+    }
+}
+
+
+# The final example helps sort files in a directory into 
+# separate folders based on their file extensions.
+
+$srcDir = "C:\UnsortedFiles\"
+$fileTypes = @("*.txt", "*.jpg", "*.pdf")
+
+$fileTypes | ForEach-Object {
+    $files = Get-ChildItem -Path $srcDir -Filter $_
+    $fileType = $_.TrimStart('*')
+    $destDir = "C:\SortedFiles\$fileType"
+
+    if (!(Test-Path $destDir)) {
+        New-Item -ItemType Directory -Path $destDir
+    }
+
+    $files | Move-Item -Destination $destDir
+}

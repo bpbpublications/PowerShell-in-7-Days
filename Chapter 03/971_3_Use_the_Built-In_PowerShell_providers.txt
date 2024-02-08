@@ -1,0 +1,57 @@
+# Explore the C Drive
+Get-ChildItem -Path C:\
+
+# Explore the registry
+Get-ChildItem -Path HKCU:\Software
+
+# Explore the environment variables
+Get-ChildItem -Path Env:\
+
+# Explore certificates
+Get-ChildItem -Path Cert:\CurrentUser\My\
+
+# Explore functions, aliases, and variables
+Get-ChildItem -Path Function:\
+Get-ChildItem -Path Alias:\
+Get-ChildItem -Path Variable:\
+
+# Find all "PDF" files in your documents folder
+$params = @{
+    Path = 'C:\Users\User\Documents'
+    Filter = '*.pdf'
+    Recurse = $true
+}
+Get-ChildItem @params
+
+# Add a new value to the "PATH" environment variable
+$env:PATH += ";C:\Python"
+
+# Create a new registry entry
+New-Item `
+    -Path 'HKLM:\Software\Policies\Microsoft\Windows\Personalization'
+
+New-ItemProperty 
+    -Path 'HKLM:\Software\Policies\Microsoft\Windows\Personalization' `
+    -Name 'NoLockScreen' `
+    -Value 1 `
+    -PropertyType DWORD
+
+# Check the existence of a certificate and then import
+$thumbprint = "3472543GR87347T8T43H8FR2897E2"
+$certificatePath = "C:\Certificates\certificate.pfx"
+$certificatePassword = ConvertTo-SecureString `
+    -String "Password" `
+    -Force -AsPlainText
+
+$certificate = Get-ChildItem `
+    -Path Cert:\LocalMachine\My | Where-Object { $_.Thumbprint -eq $thumbprint }
+
+if ($null -eq $certificate) {
+Import-PfxCertificate `
+    -FilePath $certificatePath `
+    -CertStoreLocation Cert:\LocalMachine\My `
+    -Password $certificatePassword
+}
+
+
+

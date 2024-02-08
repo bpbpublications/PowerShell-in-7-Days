@@ -1,0 +1,46 @@
+
+
+# Execute 'Greet -Name Liam' and View Output
+function Greet {
+    param($Name)
+    Write-Output "Hello, $Name!"
+}
+
+function Get-Name {
+    param($FirstName, $LastName)
+    Write-Output "My Name is: $LastName, $FirstName."
+}
+
+
+# Using Positional Parameters
+function Get-Animal{
+    param($AnimalType, $AnimalColor)
+    Write-Output "The $AnimalType is $AnimalColor in Color"
+}
+
+Get-Animal "Lion" "Golden"
+
+
+# Using Named Parameters
+function Get-Animal{
+    param($AnimalType, $AnimalColor)
+    Write-Output "The $AnimalType is $AnimalColor in Color"
+}
+
+Get-Animal -AnimalType "Lion" -AnimalColor "Golden"
+
+
+# Combinining Positional and Named Parameters
+function Get-Animal {
+    param(
+        $AnimalHabitat,
+        [Parameter(Position=1)]$AnimalType,
+        $AnimalColor
+    )
+        Write-Output "The $AnimalType from $AnimalHabitat is $AnimalColor in Color"
+}
+
+Get-Animal -AnimalHabitat "Savannah" "Lion" -AnimalColor "Golden"
+
+
+

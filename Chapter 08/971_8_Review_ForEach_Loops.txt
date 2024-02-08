@@ -1,0 +1,41 @@
+# Basic Iteration over an Array
+$colors = ("red", "blue", "green")
+foreach ($color in $colors) {
+    Write-Output $color
+}
+
+
+# Extracting Properties from Objects
+$users = @( 
+@{Name="Alice"; Age=30}, 
+@{Name="Bob"; Age=25}, 
+@{Name="Charlie"; Age=28} 
+)
+foreach ($user in $users) {
+    Write-Output "Name: $($user.Name), Age: $($user.Age)"
+}
+
+
+# Exit After Reaching a NUmber Higher than Five
+$numbers = 1..10
+foreach ($number in $numbers) {
+    if ($number -gt 5) {
+        break
+    }
+    Write-Output $number
+}
+
+
+# Nested Loop Processing
+$students = @( 
+    @{Name="Alice"; Subjects=@("Math", "History")},
+    @{Name="Bob"; Subjects=@("Physics", "Chemistry")} 
+)
+
+foreach ($student in $students) {
+    Write-Output "Name: $($student.Name)"
+    foreach ($subject in $student.Subjects) {
+        Write-Output "- Studying $subject"
+    }
+}
+

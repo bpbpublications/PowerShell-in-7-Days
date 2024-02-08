@@ -1,0 +1,10 @@
+
+# Create Blocking Policy
+New-AppLockerPolicy `
+-RuleType Path `
+-Path "C:\Program Files\PowerShell\7\pwsh.exe" `
+-Action Deny `
+-User Everyone `
+-OutVariable policy 
+
+

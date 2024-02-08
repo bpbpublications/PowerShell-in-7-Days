@@ -1,0 +1,30 @@
+# While Loop
+$count = 0
+while ($count -lt 5) {
+    Write-Output "Current count value is: $count"
+    $count++
+}
+
+# Do-While Loop
+$number = 10
+do {
+    Write-Output "Number is: $number"
+    $number++
+} while ($number -le 12)
+
+
+# Do-Until Loop
+$number = 10
+do {
+    Write-Output "Number is: $number"
+    $number++
+} until ($number -gt 12)
+
+
+# For Loop
+for ($i = 0; $i -lt 5; $i++) {
+    Write-Output "Iteration number: $i"
+}
+
+
+

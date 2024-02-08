@@ -1,0 +1,28 @@
+# Get the certificates from the local machine store
+Get-ChildItem -Path Cert:\LocalMachine\My 
+
+# Create a self-signed certificate
+New-SelfSignedCertificate -DnsName "www.example.com" -CertStoreLocation "cert:\LocalMachine\My" 
+
+# Export the certificate
+$cert = Get-ChildItem -Path Cert:\LocalMachine\My | Where-Object {$_.Subject -like "*www.example.com*"}
+Export-Certificate -Cert $cert -FilePath "C:\path\to\exportedCert.cer" 
+
+# Import the certificate
+Import-Certificate -FilePath "C:\path\to\certificate.cer" -CertStoreLocation Cert:\LocalMachine\My 
+
+# Remove the certificate
+$cert = Get-ChildItem -Path Cert:\LocalMachine\My | Where-Object {$_.Subject -like "*www.example.com*"}
+Remove-Item -Path $cert.PSPath 
+
+# Create a certificate request
+certreq -new -f "C:\path\to\request.inf" "C:\path\to\output.req" 
+
+# Retrieve the certificate from the CA
+Get-ChildItem -Path Cert:\LocalMachine\My | Where-Object {$_.NotAfter -lt (Get-Date).AddYears(1)} 
+
+# Create a certificate from an existing certificate
+$newcert = ($cert.DnsNameList).Unicode
+New-SelfSignedCertificate -CloneCert $cert -DnsName $dnsName 
+
+

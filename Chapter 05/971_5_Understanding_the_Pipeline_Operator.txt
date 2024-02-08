@@ -1,0 +1,8 @@
+# Get all processes, then filter out the ones with CPU usage greater than 50%
+Get-Process | Where-Object { $_.CPU -gt 50 }
+
+# Get all processes, then sort them by CPU usage, then select the top 5
+Get-Process | Sort-Object CPU -Descending | Select-Object -First 5
+
+# Get all processes, then sort them by CPU usage, then select the top 5, then display the name and CPU usage
+Get-Process | Sort-Object CPU -Descending | Select-Object -First 5 | Format-Table Name, CPU

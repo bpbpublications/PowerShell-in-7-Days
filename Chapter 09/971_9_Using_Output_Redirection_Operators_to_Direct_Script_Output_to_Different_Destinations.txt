@@ -1,0 +1,19 @@
+# Output Processes to a file
+Get-Process > "C:\Processes.txt"
+
+# Output Errors to a file
+Get-Process -Name NonExistentProcess 2> "C:\Errors.txt"
+
+# Append Services to a file
+Get-Service >> "C:\Services.txt"
+
+# Combining Output and Error Streams
+Get-Item "Path" > "C:\Output.txt" 2> "C:\Errors.txt"
+Get-Process -Name NonExistentProcess 2>&1
+
+# Discard the Output
+Get-Process -Name NonExistentProcess > $null
+
+# Output Files and Errors to a Separate Files
+Get-ChildItem -Path C:\ -Recurse > "C:\Files.txt" 2> "C:\Errors.txt"
+

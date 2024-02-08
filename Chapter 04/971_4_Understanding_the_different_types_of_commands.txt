@@ -1,0 +1,46 @@
+# Functions
+function Multiply-Numbers {
+    param (
+        [Parameter(Mandatory=$true)]
+        [int]$number1,
+        [Parameter(Mandatory=$true)]
+        [int]$number2
+    )
+    return $number1 * $number2
+}
+
+Multiply-Numbers -number1 5 -number2 10
+
+
+# Scripts
+$processes = Get-Process
+$processes | Export-Csv -Path "C:\Temp\Processes.csv" -NoTypeInformation
+
+# Aliases
+Get-Alias
+Set-Alias -Name "np" -Value Notepad
+
+function Get-LargestFiles {
+param(
+    [Parameter(Position=0, Mandatory=$true)]
+    [string]$path,
+    [Parameter(Position=1)]
+    [int]$top = 10
+)
+
+Get-ChildItem -Path $path -Recurse -File |
+    Sort-Object Length -Descending |    
+        Select-Object -First $top
+}
+
+Set-Alias -Name glf -Value Get-LargestFiles
+glf -path "C:\Temp" -top 10
+
+
+
+
+
+
+
+
+

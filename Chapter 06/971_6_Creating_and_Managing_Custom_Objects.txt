@@ -1,0 +1,32 @@
+# Create PSCustomObject Variable
+$user = [PSCustomObject]@{
+	Name= "John"; 
+	Age=25; 
+	Department= "HR"
+}
+
+# Add a Custom Object to an Array
+$usersList += [PSCustomObject]@{
+	Name= "Jane"; 
+	Age=28; 
+	Department= "Finance"
+}
+
+$usersList | Where-Object {$_.Age -gt 27} 
+
+# Add a Property to a Custom Object
+$user | Add-Member `
+	-Type NoteProperty `
+	-Name Title -Value "Manager" 
+
+# Add a Method to a Custom Object
+$user | Add-Member `
+	-Type ScriptMethod `
+	-Name DisplayDetails `
+	-Value { $this.Name + ", " + $this.Age + ", " + $this.Department }
+
+# Display the Custom Object
+$user.DisplayDetails()
+$user | ConvertTo-Json
+
+

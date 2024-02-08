@@ -1,0 +1,39 @@
+# Generate Numbers
+function Invoke-GenerateNumbers {
+    param([int]$Count)
+    for ($i = 0; $i -lt $Count; $i++) {
+    Write-Output $i
+    }
+}
+
+Invoke-GenerateNumbers -Count 6
+
+
+# Passing a Range of Numbers
+function Invoke-DoubleTheNumber {
+    param([int]$Number)
+    return $Number * 2
+}
+
+1..10 | ForEach-Object {Invoke-DoubleTheNumber -Number $_}
+
+
+# Complex Objects
+function Add-Age {
+    param(
+    [PSCustomObject]$Person,
+    [int]$AgeToAdd
+    )
+    $Person.Age += $AgeToAdd
+    return $Person`
+}
+
+$kaylen = [PSCustomObject]@{ Name = "Kaylen"; Age = 40}
+Write-Host $kaylen
+
+Add-Age -Person $kaylen -AgeToAdd 5
+Write-Host $kaylen
+
+
+
+

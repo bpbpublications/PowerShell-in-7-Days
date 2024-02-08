@@ -1,0 +1,39 @@
+
+# Create a function
+function Greet-User($UserName) {
+    Write-Output "Hello, $UserName!"
+}
+Greet-User -UserName "Liam"
+
+# Get Hard Disk Space
+function Get-DiskSpace($ServerName) {
+    Get-WmiObject Win32_LogicalDisk -ComputerName $ServerName | 
+    Where-Object { $_.DriveType -eq 3 } | 
+    Select-Object DeviceID, Freespace
+}
+
+# Retrieve Computer Information
+$HighCpuProcesses = Get-Process | Where-Object {$_.CPU -gt 50}
+$HighCpuProcesses | Format-Table Name, Id, CPU
+$NotRespondingProcesses = Get-Process | Where-Object {$_.Responding -eq $false}
+$NotRespondingProcesses | Format-Table Name, Id
+$TotalMemory = (Get-Process | Measure-Object -Property WS -Sum).Sum
+Write-Output "Total memory usage by all processes: $TotalMemory bytes"
+
+# Combined function
+function Get-HighCpuProcesses {
+    Get-Process | Where-Object {$_.CPU -gt 50} | Format-Table Name, Id, CPU
+}
+
+function Get-NotRespondingProcesses {
+    Get-Process | Where-Object {$_.Responding -eq $false} | Format-Table Name, Id
+}
+
+function Get-TotalMemoryUsage {
+    (Get-Process | Measure-Object -Property WS -Sum).Sum
+}
+
+Get-HighCpuProcesses
+Get-NotRespondingProcesses
+$TotalMemory = Get-TotalMemoryUsage
+Write-Output "Total memory usage by all processes: $TotalMemory bytes"

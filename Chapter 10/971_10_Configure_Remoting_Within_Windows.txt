@@ -1,0 +1,20 @@
+# Set the Network Connection Profile to Private
+Set-NetConnectionProfile -InterfaceAlias Ethernet -NetworkCategory Private
+
+# Enable PowerShell Remoting
+Enable-PSRemoting -Force
+
+# OPTIONAL: Check for WinRM Listener
+winrm e winrm/config/listener
+
+# OPTIONAL: Configure a Listener
+winrm quickconfig
+
+# Connect Locally Using PowerShell Remoting
+Enter-PSSession -ComputerName localhost
+
+
+
+
+
+

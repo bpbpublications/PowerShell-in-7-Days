@@ -1,0 +1,51 @@
+# Install the PowerShell module PSWindowsUpdate
+Install-Module -Name PSWindowsUpdate
+
+# Install a module by its name
+Import-Module -Name PSWindowsUpdate
+
+# Install the module regardless of its current installation status
+Import-Module -Name PSWindowsUpdate -Force
+
+#Install a module from the specified repository
+Install-Module -Name PSWindowsUpdate -Repository PSGallery
+
+# Install a module for all users
+Install-Module -Name PSWindowsUpdate -Scope AllUsers
+
+# Install a specific version of a module
+Install-Module -Name PSWindowsUpdate -RequiredVersion 2.2.4.1
+
+# Install a pre-release version and automatically accept the license agreement
+Install-Module -Name PSWindowsUpdate -AllowPrerelease -AcceptLicense
+
+# Install and Import module
+Install-Module PSWindowsUpdate
+Import-Module PSWindowsUpdate
+
+# Find the available cmdlets within the module
+Get-Command -Module PSWindowsUpdate
+
+# Installing, importing modules, and using a command
+# Utilize Pester is a unit-testing framework for PowerShell
+Install-Module -Name Pester -Repository PSGallery -Force
+Import-Module -Name Pester
+Invoke-Pester -Script @{
+    Path = '.\tests\';Parameters = @{ TestValue = 'SomeValue' }
+}
+
+Install PowerShellGet and find modules in Linux
+Install-Module -Name PowerShellGet -Repository PSGallery -Force
+Import-Module -Name PowerShellGet
+Find-Module -Name *Get* 
+
+# Update the PowerShell command line editing experience in macOS
+Install-Module -Name PSReadLine -Repository PSGallery -Force
+Import-Module -Name PSReadLine
+
+# Updating or Removing a module
+Update-Module -Name PSWindowsUpdate
+Remove-Module -Name PSWindowsUpdate
+
+
+
